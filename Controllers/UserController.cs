@@ -9,11 +9,12 @@ namespace Storytime.Controllers
 {
     public class UserController : ApiController
     {
-        public IHttpActionResult GetUser(string UserId)
+        [HttpGet]
+        public IHttpActionResult Get(string id)
         {
             var db = new PetaPoco.Database("AGSoftware");
 
-            var a = db.SingleOrDefault<Entities.User>("Select * from [User] Where UserId = @0", UserId);
+            var a = db.SingleOrDefault<Entities.User>("Select * from [User] Where UserId = @0", id);
             return Ok(a);
 
         }

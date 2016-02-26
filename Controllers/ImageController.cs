@@ -37,5 +37,14 @@ namespace Storytime.Controllers
                 return NotFound();
             }
         }
+
+        [HttpGet]
+        public IHttpActionResult Get(string id)
+        {
+            var db = new PetaPoco.Database("AGSoftware");
+
+            var a = db.SingleOrDefault<Entities.StorytimePost>("Select * from StorytimePost Where StorytimePostId = @0", id);
+            return Ok(a);
+        }
     }
 }

@@ -1,0 +1,9 @@
+C:\Users\gpart_000\Documents\Visual Studio 2013\Projects\MvcApplication1\Entities\bin\Debug\Entities.dll
+C:\Users\gpart_000\Documents\Visual Studio 2013\Projects\MvcApplication1\Entities\bin\Debug\Entities.pdb
+C:\Users\gpart_000\Documents\Visual Studio 2013\Projects\MvcApplication1\Entities\obj\Debug\Entities.dll
+C:\Users\gpart_000\Documents\Visual Studio 2013\Projects\MvcApplication1\Entities\obj\Debug\Entities.pdb
+C:\Users\gpart_000\Documents\Visual Studio 2013\Projects\MvcApplication1\Entities\obj\Debug\Entities.csprojResolveAssemblyReference.cache
+C:\Storytime\Entities\bin\Debug\Entities.dll
+C:\Storytime\Entities\bin\Debug\Entities.pdb
+C:\Storytime\Entities\obj\Debug\Entities.dll
+C:\Storytime\Entities\obj\Debug\Entities.pdb

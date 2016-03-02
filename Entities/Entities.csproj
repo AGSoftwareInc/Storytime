@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Email.cs" />
     <Compile Include="Login.cs" />
     <Compile Include="Storytime.cs" />
     <Compile Include="StorytimeGroup.cs" />

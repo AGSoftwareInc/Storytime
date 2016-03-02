@@ -1,6 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<parameters>
-  <parameter name="AGSoftware-Web.config Connection String" description="AGSoftware Connection String used in web.config by the application to access the database." defaultValue="Data Source=GREG;Initial Catalog=AGSoftware;Integrated Security=True;Connect Timeout=15;Encrypt=False;TrustServerCertificate=False" tags="SqlConnectionString">
-    <parameterEntry kind="XmlFile" scope="C:\\Storytime\\Web\\obj\\Debug\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='AGSoftware']/@connectionString" />
-  </parameter>
-</parameters>

@@ -1,5 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<parameters>
-  <setParameter name="IIS Web Application Name" value="Default Web Site/" />
-  <setParameter name="AGSoftware-Web.config Connection String" value="Data Source=GREG;Initial Catalog=AGSoftware;Integrated Security=True;Connect Timeout=15;Encrypt=False;TrustServerCertificate=False" />
-</parameters>

@@ -6,10 +6,12 @@ using System.Threading.Tasks;
 
 namespace Entities
 {
-    class StorytimeGroup
+    public class StorytimeGroup
     {
         public int StorytimeGroupId { get; set; }
+        public string GroupName { get; set; }
         public int StorytimeId { get; set; }
         public int UserGroupId { get; set; }
+        public DateTime DateCreated { get; set; }
     }
 }

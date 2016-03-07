@@ -19,7 +19,7 @@ namespace Storytime.Controllers
             if (a != null)
             {
                 Entities.ContactList contactlist = new Entities.ContactList();
-                contactlist.UserId = contact.UserId;
+                contactlist.UserId = int.Parse(id);
                 contactlist.ContactId = a.UserId;
                 contactlist.DateCreated = System.DateTime.Now;
 
@@ -38,11 +38,14 @@ namespace Storytime.Controllers
         {
             var db = new PetaPoco.Database("AGSoftware");
 
-            System.Collections.Generic.List<Entities.ContactList> contactlist = new List<Entities.ContactList>();
+            System.Collections.Generic.List<Entities.User> contactlist = new List<Entities.User>();
 
             foreach (var a in db.Query<Entities.ContactList>("Select * from ContactList Where UserId = @0", id))
             {
-                contactlist.Add(a);
+                //todo see if there is a better way to do this with normalization and/or one connection.
+                var db2 = new PetaPoco.Database("AGSoftware");
+                var b = db2.SingleOrDefault<Entities.User>("Select * from [User] Where UserId = @0", a.ContactId);
+                contactlist.Add(b);
             }
 
             if (contactlist.Count > 0)

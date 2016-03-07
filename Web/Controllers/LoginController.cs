@@ -15,7 +15,6 @@ namespace Storytime.Controllers
         {
             var db = new PetaPoco.Database("AGSoftware");
 
-
             var a = db.SingleOrDefault<Entities.User>("Select * from [User] Where Username = @0 and Password = @1", login.Username, login.Password);
 
             if (a != null)

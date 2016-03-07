@@ -31,5 +31,34 @@ namespace Storytime.Controllers
 
            return Ok();
         }
+
+        [HttpGet]
+        public IHttpActionResult Get(string id)
+        {
+            var db = new PetaPoco.Database("AGSoftware");
+
+            var a = db.SingleOrDefault<Entities.UserGroup>("Select * from UserGroup Where UserGroupId = @0", id);
+
+            if (a != null)
+            {
+                var db2 = new PetaPoco.Database("AGSoftware");
+
+                System.Collections.Generic.List<Entities.User> grouplist = new List<Entities.User>();
+
+                foreach (var b in db.Query<Entities.ContactList>("Select * from UserGroupUser Where GroupId = @0", a.UserGroupId))
+                {
+                    //todo see if there is a better way to do this with normalization and/or one connection.
+                    var db3 = new PetaPoco.Database("AGSoftware");
+                    var c = db3.SingleOrDefault<Entities.User>("Select * from [User] Where UserId = @0", b.UserId);
+                    grouplist.Add(c);
+                }
+
+                return Ok(grouplist);
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
     }
 }

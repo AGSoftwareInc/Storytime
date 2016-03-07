@@ -8,9 +8,7 @@ namespace Entities
 {
     public class UserGroupUser
     {
-        public int UserGroupUserId { get; set; }
         public int UserId { get; set; }
         public int GroupId { get; set; }
-
     }
 }

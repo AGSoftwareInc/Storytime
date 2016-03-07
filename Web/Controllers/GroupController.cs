@@ -17,22 +17,19 @@ namespace Storytime.Controllers
             usergroup.DateCreated = System.DateTime.Now;
             db.Insert(usergroup);
 
-            foreach (var a in db.Query<Entities.ContactList>("Select * from [User] Where UserId = @0", id))
+            Entities.UserGroupUser usergroupuser = null;
+
+            foreach (Entities.User user in usergroup.Users)
             {
                 //todo see if there is a better way to do this with normalization and/or one connection.
                 var db2 = new PetaPoco.Database("AGSoftware");
-                var b = db2.SingleOrDefault<Entities.User>("Select * from [User] Where UserId = @0", a.ContactId);
-                contactlist.Add(b);
+                usergroupuser = new Entities.UserGroupUser();
+                usergroupuser.GroupId = usergroup.UserGroupId;
+                usergroupuser.UserId = db2.SingleOrDefault<Entities.User>("Select UserId from [USER] where PhoneNumber = @0", user.PhoneNumber).UserId; ;
+                db2.Insert(usergroupuser);
             }
 
-            if (contactlist.Count > 0)
-            {
-                return Ok(contactlist);
-            }
-            else
-            {
-                return NotFound();
-            }
+           return Ok();
         }
     }
 }

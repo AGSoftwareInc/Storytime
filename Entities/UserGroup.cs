@@ -12,6 +12,7 @@ namespace Entities
         public int UserId { get; set; }
         public string GroupName { get; set; }
         public DateTime DateCreated { get; set; }
+        [PetaPoco.Ignore] 
         public System.Collections.Generic.List<User> Users { get; set; }
     }
 }

@@ -1,1 +1,5 @@
 ﻿packages/
+Web/bin
+Entities/bin
+Web/obj
+Entities/obj

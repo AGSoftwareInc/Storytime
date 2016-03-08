@@ -9,3 +9,8 @@ C:\Storytime\Entities\bin\Debug\Entities.pdb
 C:\Storytime\Entities\obj\Debug\Entities.csprojResolveAssemblyReference.cache
 C:\Storytime\Entities\obj\Debug\Entities.dll
 C:\Storytime\Entities\obj\Debug\Entities.pdb
+C:\code\Storytime\Entities\bin\Debug\Entities.dll.config
+C:\code\Storytime\Entities\bin\Debug\Entities.dll
+C:\code\Storytime\Entities\bin\Debug\Entities.pdb
+C:\code\Storytime\Entities\obj\Debug\Entities.dll
+C:\code\Storytime\Entities\obj\Debug\Entities.pdb

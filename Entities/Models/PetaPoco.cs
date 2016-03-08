@@ -2,7 +2,7 @@
 //      Apache License, Version 2.0 https://github.com/CollaboratingPlatypus/PetaPoco/blob/master/LICENSE.txt
 // </copyright>
 // <author>PetaPoco - CollaboratingPlatypus</author>
-// <date>2016/01/20</date>
+// <date>2016/03/06</date>
 
 // --------------------------WARNING--------------------------------
 // -----------------------------------------------------------------
@@ -32,6 +32,7 @@ using System;
 
 namespace PetaPoco
 {
+#pragma warning disable 1066,1570,1573,1591
 
     /// <summary>
     ///     The main PetaPoco Database class.  You can either use this class directly, or derive from it.
@@ -66,7 +67,7 @@ namespace PetaPoco
             var entry = ConfigurationManager.ConnectionStrings[0];
             _connectionString = entry.ConnectionString;
             var providerName = !string.IsNullOrEmpty(entry.ProviderName) ? entry.ProviderName : "System.Data.SqlClient";
-            Initialise(DatabaseProvider.Resolve(providerName, false), null);
+            Initialise(DatabaseProvider.Resolve(providerName, false, _connectionString), null);
         }
 
         /// <summary>
@@ -88,7 +89,7 @@ namespace PetaPoco
             // Prevent closing external connection
             _sharedConnectionDepth = 2;
 
-            Initialise(DatabaseProvider.Resolve(_sharedConnection.GetType(), false), null);
+            Initialise(DatabaseProvider.Resolve(_sharedConnection.GetType(), false, _connectionString), null);
         }
 
         /// <summary>
@@ -107,7 +108,7 @@ namespace PetaPoco
                 throw new ArgumentException("Connection string cannot be null or empty", "connectionString");
 
             _connectionString = connectionString;
-            Initialise(DatabaseProvider.Resolve(providerName, true), null);
+            Initialise(DatabaseProvider.Resolve(providerName, true, _connectionString), null);
         }
 
         /// <summary>
@@ -126,7 +127,7 @@ namespace PetaPoco
                 throw new ArgumentNullException("factory");
 
             _connectionString = connectionString;
-            Initialise(DatabaseProvider.Resolve(factory.GetType(), false), null);
+            Initialise(DatabaseProvider.Resolve(factory.GetType(), false, _connectionString), null);
         }
 
         /// <summary>
@@ -148,7 +149,7 @@ namespace PetaPoco
 
             _connectionString = entry.ConnectionString;
             var providerName = !string.IsNullOrEmpty(entry.ProviderName) ? entry.ProviderName : "System.Data.SqlClient";
-            Initialise(DatabaseProvider.Resolve(providerName, false), null);
+            Initialise(DatabaseProvider.Resolve(providerName, false, _connectionString), null);
         }
 
         /// <summary>
@@ -215,7 +216,7 @@ namespace PetaPoco
                     throw new InvalidOperationException("Both a connection string and provider are required or neither.");
 
                 var providerName = !string.IsNullOrEmpty(entry.ProviderName) ? entry.ProviderName : "System.Data.SqlClient";
-                Initialise(DatabaseProvider.Resolve(providerName, false), defaultMapper);
+                Initialise(DatabaseProvider.Resolve(providerName, false, _connectionString), defaultMapper);
             });
 
             settings.TryGetSetting<bool>(DatabaseConfigurationExtensions.EnableNamedParams, v => EnableNamedParams = v);
@@ -441,6 +442,11 @@ namespace PetaPoco
             if (value == null)
             {
                 p.Value = DBNull.Value;
+
+                if (pi != null && pi.PropertyType.Name == "Byte[]")
+                {
+                    p.DbType = DbType.Binary;
+                }
             }
             else
             {
@@ -479,7 +485,6 @@ namespace PetaPoco
                     p.GetType().GetProperty("UdtTypeName").SetValue(p, "geography", null); //geography is the equivalent SQL Server Type
                     p.Value = value;
                 }
-
                 else if (value.GetType().Name == "SqlGeometry") //SqlGeometry is a CLR Type
                 {
                     p.GetType().GetProperty("UdtTypeName").SetValue(p, "geometry", null); //geography is the equivalent SQL Server Type
@@ -1195,7 +1200,9 @@ namespace PetaPoco
             if (poco == null)
                 throw new ArgumentNullException("poco");
 
-            return ExecuteInsert(tableName, null, false, poco);
+            var pd = PocoData.ForType(poco.GetType(), _defaultMapper);
+
+            return ExecuteInsert(tableName, pd == null ? null : pd.TableInfo.PrimaryKey, pd != null && pd.TableInfo.AutoIncrement, poco);
         }
 
         /// <summary>
@@ -1216,7 +1223,13 @@ namespace PetaPoco
             if (poco == null)
                 throw new ArgumentNullException("poco");
 
-            return ExecuteInsert(tableName, primaryKeyName, true, poco);
+            var t = poco.GetType();
+            var pd = PocoData.ForType(poco.GetType(), _defaultMapper);
+            var autoIncrement = pd == null || pd.TableInfo.AutoIncrement ||
+                                t.Name.Contains("AnonymousType") &&
+                                !t.GetProperties().Any(p => p.Name.Equals(primaryKeyName, StringComparison.OrdinalIgnoreCase));
+
+            return ExecuteInsert(tableName, primaryKeyName, autoIncrement, poco);
         }
 
         /// <summary>
@@ -1330,7 +1343,7 @@ namespace PetaPoco
                         object id = _provider.ExecuteInsert(this, cmd, primaryKeyName);
 
                         // Assign the ID back to the primary key property
-                        if (primaryKeyName != null)
+                        if (primaryKeyName != null && !poco.GetType().Name.Contains("AnonymousType"))
                         {
                             PocoColumn pc;
                             if (pd.Columns.TryGetValue(primaryKeyName, out pc))
@@ -2796,42 +2809,42 @@ namespace PetaPoco
     public interface IAlterPoco
     {
         /// <summary>
-        ///     Performs an SQL Insert
+        ///     Performs an SQL Insert.
         /// </summary>
-        /// <param name="tableName">The name of the table to insert into</param>
-        /// <param name="poco">The POCO object that specifies the column values to be inserted</param>
-        /// <returns>The auto allocated primary key of the new record, or null for non-auto-increment tables</returns>
+        /// <param name="tableName">The name of the table to insert into.</param>
+        /// <param name="poco">The POCO object that specifies the column values to be inserted.</param>
+        /// <returns>The auto allocated primary key of the new record, or null for non-auto-increment tables.</returns>
         object Insert(string tableName, object poco);
 
         /// <summary>
-        ///     Performs an SQL Insert
+        ///     Performs an SQL Insert.
         /// </summary>
-        /// <param name="tableName">The name of the table to insert into</param>
-        /// <param name="primaryKeyName">The name of the primary key column of the table</param>
-        /// <param name="poco">The POCO object that specifies the column values to be inserted</param>
-        /// <returns>The auto allocated primary key of the new record, or null for non-auto-increment tables</returns>
+        /// <param name="tableName">The name of the table to insert into.</param>
+        /// <param name="primaryKeyName">The name of the primary key column of the table.</param>
+        /// <param name="poco">The POCO object that specifies the column values to be inserted.</param>
+        /// <returns>The auto allocated primary key of the new record, or null for non-auto-increment tables.</returns>
         object Insert(string tableName, string primaryKeyName, object poco);
 
         /// <summary>
-        ///     Performs an SQL Insert
+        ///     Performs an SQL Insert.
         /// </summary>
-        /// <param name="tableName">The name of the table to insert into</param>
-        /// <param name="primaryKeyName">The name of the primary key column of the table</param>
-        /// <param name="autoIncrement">True if the primary key is automatically allocated by the DB</param>
-        /// <param name="poco">The POCO object that specifies the column values to be inserted</param>
-        /// <returns>The auto allocated primary key of the new record, or null for non-auto-increment tables</returns>
+        /// <param name="tableName">The name of the table to insert into.</param>
+        /// <param name="primaryKeyName">The name of the primary key column of the table.</param>
+        /// <param name="autoIncrement">True if the primary key is automatically allocated by the DB.</param>
+        /// <param name="poco">The POCO object that specifies the column values to be inserted.</param>
+        /// <returns>The auto allocated primary key of the new record, or null for non-auto-increment tables.</returns>
         /// <remarks>
-        ///     Inserts a poco into a table.  If the poco has a property with the same name
-        ///     as the primary key the id of the new record is assigned to it.  Either way,
+        ///     Inserts a poco into a table. If the poco has a property with the same name
+        ///     as the primary key, the id of the new record is assigned to it. Either way,
         ///     the new id is returned.
         /// </remarks>
         object Insert(string tableName, string primaryKeyName, bool autoIncrement, object poco);
 
         /// <summary>
-        ///     Performs an SQL Insert
+        ///     Performs an SQL Insert.
         /// </summary>
-        /// <param name="poco">The POCO object that specifies the column values to be inserted</param>
-        /// <returns>The auto allocated primary key of the new record, or null for non-auto-increment tables</returns>
+        /// <param name="poco">The POCO object that specifies the column values to be inserted.</param>
+        /// <returns>The auto allocated primary key of the new record, or null for non-auto-increment tables.</returns>
         /// <remarks>
         ///     The name of the table, it's primary key and whether it's an auto-allocated primary key are retrieved
         ///     from the POCO's attributes
@@ -4328,6 +4341,9 @@ namespace PetaPoco
             };
             IsPrimaryKeyAutoIncrement = t =>
             {
+                if (t.IsGenericType && t.GetGenericTypeDefinition() == typeof(Nullable<>))
+                    t = t.GetGenericArguments()[0];
+
                 if (t == typeof(long) || t == typeof(ulong))
                     return true;
                 if (t == typeof(int) || t == typeof(uint))
@@ -4586,9 +4602,10 @@ namespace PetaPoco
         ///     Look at the type and provider name being used and instantiate a suitable DatabaseType instance.
         /// </summary>
         /// <param name="type">The type name.</param>
-        /// <param name="allowDefault">A flag to specify whether a default provider is allowed to be chosen if none is matched.</param>
+        /// <param name="allowDefault">A flag that when set allows the default <see cref="SqlServerDatabaseProvider"/> to be returned if not match is found.</param>
+        /// <param name="connectionString">The connection string.</param>
         /// <returns>The database provider.</returns>
-        internal static IProvider Resolve(Type type, bool allowDefault)
+        internal static IProvider Resolve(Type type, bool allowDefault, string connectionString)
         {
             var typeName = type.Name;
 
@@ -4609,7 +4626,13 @@ namespace PetaPoco
                 return Singleton<OracleDatabaseProvider>.Instance;
             if (typeName.Equals("SqlConnection") || typeName.Equals("SqlClientFactory"))
                 return Singleton<SqlServerDatabaseProvider>.Instance;
-
+            if (typeName.StartsWith("FbConnection") || typeName.EndsWith("FirebirdClientFactory"))
+                return Singleton<FirebirdDbDatabaseProvider>.Instance;
+            if (typeName.IndexOf("OleDb", StringComparison.InvariantCultureIgnoreCase) >= 0
+                && (connectionString.IndexOf("Jet.OLEDB", StringComparison.InvariantCultureIgnoreCase) > 0 || connectionString.IndexOf("ACE.OLEDB", StringComparison.InvariantCultureIgnoreCase) > 0))
+            {
+                return Singleton<MsAccessDbDatabaseProvider>.Instance;
+            }
             if (!allowDefault)
                 throw new ArgumentException("Could not match `" + type.FullName + "` to a provider.", "type");
 
@@ -4621,8 +4644,10 @@ namespace PetaPoco
         ///     Look at the type and provider name being used and instantiate a suitable DatabaseType instance.
         /// </summary>
         /// <param name="providerName">The provider name.</param>
+        /// <param name="allowDefault">A flag that when set allows the default <see cref="SqlServerDatabaseProvider"/> to be returned if not match is found.</param>
+        /// <param name="connectionString">The connection string.</param>
         /// <returns>The database type.</returns>
-        internal static IProvider Resolve(string providerName, bool allowDefault)
+        internal static IProvider Resolve(string providerName, bool allowDefault, string connectionString)
         {
             // Try again with provider name
             if (providerName.IndexOf("MySql", StringComparison.InvariantCultureIgnoreCase) >= 0)
@@ -4641,6 +4666,14 @@ namespace PetaPoco
                 return Singleton<SQLiteDatabaseProvider>.Instance;
             if (providerName.IndexOf("Oracle", StringComparison.InvariantCultureIgnoreCase) >= 0)
                 return Singleton<OracleDatabaseProvider>.Instance;
+            if (providerName.IndexOf("Firebird", StringComparison.InvariantCultureIgnoreCase) >= 0 ||
+                providerName.IndexOf("FbConnection", StringComparison.InvariantCultureIgnoreCase) >= 0)
+                return Singleton<FirebirdDbDatabaseProvider>.Instance;
+            if (providerName.IndexOf("OleDb", StringComparison.InvariantCultureIgnoreCase) >= 0
+                && (connectionString.IndexOf("Jet.OLEDB", StringComparison.InvariantCultureIgnoreCase) > 0 || connectionString.IndexOf("ACE.OLEDB", StringComparison.InvariantCultureIgnoreCase) > 0))
+            {
+                return Singleton<MsAccessDbDatabaseProvider>.Instance;
+            }
             if (providerName.IndexOf("SqlServer", StringComparison.InvariantCultureIgnoreCase) >= 0 ||
                 providerName.IndexOf("System.Data.SqlClient", StringComparison.InvariantCultureIgnoreCase) >= 0)
                 return Singleton<SqlServerDatabaseProvider>.Instance;
@@ -4823,6 +4856,21 @@ namespace PetaPoco
         string GetAutoIncrementExpression(TableInfo tableInfo);
 
         DbProviderFactory GetFactory();
+    }
+
+
+    /// <summary>
+    ///     Represents the contract for the transaction.
+    /// </summary>
+    /// <remarks>
+    ///     A PetaPoco helper to support transactions using the using syntax.
+    /// </remarks>
+    public interface ITransaction : IDisposable, IHideObjectMethods
+    {
+        /// <summary>
+        ///     Completes the transaction. Not calling complete will cause the transaction to rollback on dispose.
+        /// </summary>
+        void Complete();
     }
 
 
@@ -5170,7 +5218,11 @@ namespace PetaPoco
 
         public virtual object ChangeType(object val)
         {
-            return Convert.ChangeType(val, PropertyInfo.PropertyType);
+            var t = PropertyInfo.PropertyType;
+            if (val.GetType().IsValueType && PropertyInfo.PropertyType.IsGenericType && PropertyInfo.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>))
+                t = t.GetGenericArguments()[0];
+
+            return Convert.ChangeType(val, t);
         }
     }
 
@@ -5206,7 +5258,7 @@ namespace PetaPoco
 
             // Work out bound properties
             Columns = new Dictionary<string, PocoColumn>(StringComparer.OrdinalIgnoreCase);
-            foreach (var pi in type.GetProperties())
+            foreach (var pi in type.GetProperties(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public))
             {
                 ColumnInfo ci = mapper.GetColumnInfo(pi);
                 if (ci == null)
@@ -5277,11 +5329,7 @@ namespace PetaPoco
                 if (Type == typeof(object))
                 {
                     // var poco=new T()
-                    var ctor = Type.GetConstructor(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null, new Type[0], null);
-                    if (ctor == null)
-                        throw new InvalidOperationException("Type [" + Type.FullName + "] should have default public or non-public constructor");
-
-                    il.Emit(OpCodes.Newobj, ctor);
+                    il.Emit(OpCodes.Newobj, typeof(System.Dynamic.ExpandoObject).GetConstructor(Type.EmptyTypes));          // obj
 
                     MethodInfo fnAdd = typeof(IDictionary<string, object>).GetMethod("Add");
 
@@ -5921,11 +5969,6 @@ namespace PetaPoco
     }
 
 
-    public interface ITransaction : IDisposable
-    {
-        void Complete();
-    }
-
     /// <summary>
     ///     Transaction object helps maintain transaction depth counts
     /// </summary>
@@ -6520,6 +6563,38 @@ namespace PetaPoco
     }
 
 
+    public class FirebirdDbDatabaseProvider : DatabaseProvider
+    {
+        public override DbProviderFactory GetFactory()
+        {
+            return GetFactory("FirebirdSql.Data.FirebirdClient.FirebirdClientFactory, FirebirdSql.Data.FirebirdClient");
+        }
+
+        public override string BuildPageQuery(long skip, long take, SQLParts parts, ref object[] args)
+        {
+            var sql = string.Format("{0}\nROWS @{1} TO @{2}", parts.Sql, args.Length, args.Length + 1);
+            args = args.Concat(new object[] { skip + 1, skip + take }).ToArray();
+            return sql;
+        }
+
+        public override object ExecuteInsert(Database database, IDbCommand cmd, string primaryKeyName)
+        {
+            cmd.CommandText = cmd.CommandText.TrimEnd();
+
+            if (cmd.CommandText.EndsWith(";"))
+                cmd.CommandText = cmd.CommandText.Substring(0, cmd.CommandText.Length - 1);
+
+            cmd.CommandText += " RETURNING " + EscapeSqlIdentifier(primaryKeyName) + ";";
+            return database.ExecuteScalarHelper(cmd);
+        }
+
+        public override string EscapeSqlIdentifier(string sqlIdentifier)
+        {
+            return string.Format("\"{0}\"", sqlIdentifier);
+        }
+    }
+
+
     public class MariaDbDatabaseProvider : DatabaseProvider
     {
         public override DbProviderFactory GetFactory()
@@ -6544,6 +6619,27 @@ namespace PetaPoco
         public override string GetExistsSql()
         {
             return "SELECT EXISTS (SELECT 1 FROM {0} WHERE {1})";
+        }
+    }
+
+
+    public class MsAccessDbDatabaseProvider : DatabaseProvider
+    {
+        public override DbProviderFactory GetFactory()
+        {
+            return DbProviderFactories.GetFactory("System.Data.OleDb");
+        }
+
+        public override object ExecuteInsert(Database database, IDbCommand cmd, string primaryKeyName)
+        {
+            database.ExecuteNonQueryHelper(cmd);
+            cmd.CommandText = "SELECT @@IDENTITY AS NewID;";
+            return database.ExecuteScalarHelper(cmd);
+        }
+
+        public override string BuildPageQuery(long skip, long take, SQLParts parts, ref object[] args)
+        {
+            throw new NotSupportedException("The Access provider does not support paging.");
         }
     }
 
@@ -6650,6 +6746,11 @@ namespace PetaPoco
             return GetFactory("Npgsql.NpgsqlFactory, Npgsql, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7");
         }
 
+        public override string GetExistsSql()
+        {
+            return "SELECT CASE WHEN EXISTS(SELECT 1 FROM {0} WHERE {1}) THEN 1 ELSE 0 END";
+        }
+
         public override object MapParameterValue(object value)
         {
             // Don't map bools to ints in PostgreSQL
@@ -6725,6 +6826,8 @@ namespace PetaPoco
 
         public override string BuildPageQuery(long skip, long take, SQLParts parts, ref object[] args)
         {
+            if (string.IsNullOrEmpty(parts.SqlOrderBy))
+                parts.Sql += " ORDER BY ABS(1)";
             var sqlPage = string.Format("{0}\nOFFSET @{1} ROWS FETCH NEXT @{2} ROWS ONLY", parts.Sql, args.Length, args.Length + 1);
             args = args.Concat(new object[] {skip, take}).ToArray();
             return sqlPage;
@@ -6830,7 +6933,7 @@ namespace PetaPoco
 
     internal static class AutoSelectHelper
     {
-        private static Regex rxSelect = new Regex(@"\A\s*(SELECT|EXECUTE|CALL)\s",
+        private static Regex rxSelect = new Regex(@"\A\s*(SELECT|EXECUTE|CALL|WITH|SET|DECLARE)\s",
             RegexOptions.Compiled | RegexOptions.Singleline | RegexOptions.IgnoreCase | RegexOptions.Multiline);
 
         private static Regex rxFrom = new Regex(@"\A\s*FROM\s",
@@ -6972,7 +7075,7 @@ namespace PetaPoco
 
         public Regex RegexOrderBy =
             new Regex(
-                @"\bORDER\s+BY\s+(?!.*?(?:\)|\s+)AS\s)(?:\((?>\((?<depth>)|\)(?<-depth>)|.?)*(?(depth)(?!))\)|[\w\(\)\.])+(?:\s+(?:ASC|DESC))?(?:\s*,\s*(?:\((?>\((?<depth>)|\)(?<-depth>)|.?)*(?(depth)(?!))\)|[\w\(\)\.])+(?:\s+(?:ASC|DESC))?)*",
+                @"\bORDER\s+BY\s+(?!.*?(?:\)|\s+)AS\s)(?:\((?>\((?<depth>)|\)(?<-depth>)|.?)*(?(depth)(?!))\)|[\[\]`""\w\(\)\.])+(?:\s+(?:ASC|DESC))?(?:\s*,\s*(?:\((?>\((?<depth>)|\)(?<-depth>)|.?)*(?(depth)(?!))\)|[\[\]`""\w\(\)\.])+(?:\s+(?:ASC|DESC))?)*",
                 RegexOptions.RightToLeft | RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.Singleline | RegexOptions.Compiled);
 
         public static IPagingHelper Instance { get; private set; }
@@ -7001,7 +7104,7 @@ namespace PetaPoco
                 return false;
 
             // Save column list and replace with COUNT(*)
-            Group g = m.Groups[1];
+            var g = m.Groups[1];
             parts.SqlSelectRemoved = sql.Substring(g.Index);
 
             if (RegexDistinct.IsMatch(parts.SqlSelectRemoved))
@@ -7011,11 +7114,7 @@ namespace PetaPoco
 
             // Look for the last "ORDER BY <whatever>" clause not part of a ROW_NUMBER expression
             m = RegexOrderBy.Match(parts.SqlCount);
-            if (!m.Success)
-            {
-                parts.SqlOrderBy = null;
-            }
-            else
+            if (m.Success)
             {
                 g = m.Groups[0];
                 parts.SqlOrderBy = g.ToString();
@@ -7125,4 +7224,5 @@ namespace PetaPoco
         public string SqlOrderBy;
     }
 
+#pragma warning restore 1066,1570,1573,1591
 }

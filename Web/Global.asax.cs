@@ -6,6 +6,9 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using StructureMap;
+using StructureMap.Graph;
+using Storytime.Providers;
 
 namespace Storytime
 {
@@ -18,6 +21,14 @@ namespace Storytime
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+            GlobalConfiguration.Configuration.Formatters.Add(new MultipartMediaTypeFormatter());
+
+
+        }
+
+        protected static void Bootstrap()
+        {
+       
         }
     }
 }

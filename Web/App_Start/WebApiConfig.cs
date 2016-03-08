@@ -23,10 +23,16 @@ namespace Storytime
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "api/{controller}/{id}",
-                defaults: new { id = RouteParameter.Optional}
+                defaults: new { id = RouteParameter.Optional }
 
             );
-       
+            config.Routes.MapHttpRoute(
+                  name: "PostBlobUpload",
+                  routeTemplate: "api/{controller}/{action}",
+                  defaults: new { controller = "StoryController", action = "Series" }
+                                   
+      );
+
         }
     }
 }

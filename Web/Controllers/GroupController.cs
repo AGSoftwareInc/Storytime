@@ -7,25 +7,26 @@ using System.Web.Http;
 
 namespace Storytime.Controllers
 {
+    [Authorize]
     public class GroupController : ApiController
     {
         [HttpPost]
         public IHttpActionResult Post([FromUri] string id, [FromBody]Entities.UserGroup usergroup)
         {
             var db = new PetaPoco.Database("AGSoftware");
-            usergroup.UserId = int.Parse(id);
+            usergroup.UserId = Storytime.Providers.UserHelper.GetUserId(this.User.Identity.Name);
             usergroup.DateCreated = System.DateTime.Now;
             db.Insert(usergroup);
 
             Entities.UserGroupUser usergroupuser = null;
 
-            foreach (Entities.User user in usergroup.Users)
+            foreach (Entities.AspNetUsers user in usergroup.Users)
             {
                 //todo see if there is a better way to do this with normalization and/or one connection.
                 var db2 = new PetaPoco.Database("AGSoftware");
                 usergroupuser = new Entities.UserGroupUser();
                 usergroupuser.GroupId = usergroup.UserGroupId;
-                usergroupuser.UserId = db2.SingleOrDefault<Entities.User>("Select UserId from [USER] where PhoneNumber = @0", user.PhoneNumber).UserId; ;
+                usergroupuser.UserId = db2.SingleOrDefault<Entities.AspNetUsers>("Select Id from AspNetUsers where PhoneNumber = @0", user.PhoneNumber).Id; ;
                 db2.Insert(usergroupuser);
             }
 
@@ -37,18 +38,18 @@ namespace Storytime.Controllers
         {
             var db = new PetaPoco.Database("AGSoftware");
 
-            var a = db.SingleOrDefault<Entities.UserGroup>("Select * from UserGroup Where UserGroupId = @0", id);
+            var b = db.SingleOrDefault<Entities.UserGroup>("Select * from UserGroup Where UserGroupId = @0", id);
 
-            if (a != null)
+            if (b != null)
             {
-                System.Collections.Generic.List<Entities.User> grouplist = new List<Entities.User>();
+                System.Collections.Generic.List<Entities.AspNetUsers> grouplist = new List<Entities.AspNetUsers>();
 
-                foreach (var b in db.Query<Entities.ContactList>("Select * from UserGroupUser Where GroupId = @0", a.UserGroupId))
+                foreach (var c in db.Query<Entities.ContactList>("Select * from UserGroupUser Where GroupId = @0", b.UserGroupId))
                 {
                     //todo see if there is a better way to do this with normalization and/or one connection.
                     var db2 = new PetaPoco.Database("AGSoftware");
-                    var c = db2.SingleOrDefault<Entities.User>("Select * from [User] Where UserId = @0", b.UserId);
-                    grouplist.Add(c);
+                    var d = db2.SingleOrDefault<Entities.AspNetUsers>("Select * from AspNetUsers Where Id = @0", c.UserId);
+                    grouplist.Add(d);
                 }
 
                 return Ok(grouplist);

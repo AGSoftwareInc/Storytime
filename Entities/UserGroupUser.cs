@@ -8,7 +8,7 @@ namespace Entities
 {
     public class UserGroupUser
     {
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         public int GroupId { get; set; }
     }
 }

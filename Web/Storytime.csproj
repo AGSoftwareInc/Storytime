@@ -203,15 +203,26 @@
     <Compile Include="Controllers\GroupController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ImageController.cs" />
-    <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\PasswordController.cs" />
-    <Compile Include="Controllers\SignUpController.cs" />
     <Compile Include="Controllers\StoryController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201603091556030_InitialCreate.cs" />
+    <Compile Include="Migrations\201603091556030_InitialCreate.Designer.cs">
+      <DependentUpon>201603091556030_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201603091832311_FirstNameLastName.cs" />
+    <Compile Include="Migrations\201603091832311_FirstNameLastName.Designer.cs">
+      <DependentUpon>201603091832311_FirstNameLastName.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201603091953325_DateCreated.cs" />
+    <Compile Include="Migrations\201603091953325_DateCreated.Designer.cs">
+      <DependentUpon>201603091953325_DateCreated.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -221,6 +232,7 @@
     <Compile Include="Providers\BlobService.cs" />
     <Compile Include="Providers\BlobStorageUploadProvider.cs" />
     <Compile Include="Providers\MultiPartMediaTypeFormatter.cs" />
+    <Compile Include="Providers\UserHelper.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -291,6 +303,17 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201603091556030_InitialCreate.resx">
+      <DependentUpon>201603091556030_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201603091832311_FirstNameLastName.resx">
+      <DependentUpon>201603091832311_FirstNameLastName.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201603091953325_DateCreated.resx">
+      <DependentUpon>201603091953325_DateCreated.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

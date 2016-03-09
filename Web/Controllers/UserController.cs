@@ -7,6 +7,7 @@ using System.Web.Http;
 
 namespace Storytime.Controllers
 {
+    [Authorize]
     public class UserController : ApiController
     {
         [HttpGet]
@@ -14,7 +15,7 @@ namespace Storytime.Controllers
         {
             var db = new PetaPoco.Database("AGSoftware");
 
-            var a = db.SingleOrDefault<Entities.User>("Select * from [User] Where UserId = @0", id);
+            var a = db.SingleOrDefault<Entities.AspNetUsers>("Select * from AspNetUsers Where UserId = @0", id);
             return Ok(a);
 
         }

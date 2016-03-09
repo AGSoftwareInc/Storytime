@@ -9,6 +9,7 @@ using System.Web.Http;
 
 namespace Storytime.Controllers
 {
+    [Authorize]
     public class ImageController : ApiController
     {
         [HttpPost]

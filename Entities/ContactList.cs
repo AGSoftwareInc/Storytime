@@ -8,8 +8,8 @@ namespace Entities
 {
     public class ContactList
     {
-        public int UserId { get; set; }
-        public int ContactId { get; set; }
+        public string UserId { get; set; }
+        public string ContactId { get; set; }
         public DateTime DateCreated { get; set; }
     }
 }

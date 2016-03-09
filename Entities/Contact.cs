@@ -8,7 +8,7 @@ namespace Entities
 {
     public class Contact
     {
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         public string Name { get; set; }
         public string PhoneNumber { get; set; }
     }

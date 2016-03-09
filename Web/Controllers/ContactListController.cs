@@ -7,6 +7,7 @@ using System.Web.Http;
 
 namespace Storytime.Controllers
 {
+    [Authorize]
     public class ContactListController : ApiController
     {
         [HttpPost]
@@ -14,13 +15,13 @@ namespace Storytime.Controllers
         {
             var db = new PetaPoco.Database("AGSoftware");
 
-            var a = db.SingleOrDefault<Entities.User>("Select * from [User] Where PhoneNumber = @0", contact.PhoneNumber);
+            var a = db.SingleOrDefault<Entities.AspNetUsers>("Select * from AspNetUsers Where PhoneNumber = @0", contact.PhoneNumber);
 
             if (a != null)
             {
                 Entities.ContactList contactlist = new Entities.ContactList();
-                contactlist.UserId = int.Parse(id);
-                contactlist.ContactId = a.UserId;
+                contactlist.UserId = Storytime.Providers.UserHelper.GetUserId(this.User.Identity.Name);
+                contactlist.ContactId = a.Id;
                 contactlist.DateCreated = System.DateTime.Now;
 
                 db.Insert(contactlist);
@@ -38,13 +39,13 @@ namespace Storytime.Controllers
         {
             var db = new PetaPoco.Database("AGSoftware");
 
-            System.Collections.Generic.List<Entities.User> contactlist = new List<Entities.User>();
+            System.Collections.Generic.List<Entities.AspNetUsers> contactlist = new List<Entities.AspNetUsers>();
 
-            foreach (var a in db.Query<Entities.ContactList>("Select * from ContactList Where UserId = @0", id))
+            foreach (var a in db.Query<Entities.ContactList>("Select * from ContactList Where UserId = @0", Storytime.Providers.UserHelper.GetUserId(this.User.Identity.Name)))
             {
                 //todo see if there is a better way to do this with normalization and/or one connection.
                 var db2 = new PetaPoco.Database("AGSoftware");
-                var b = db2.SingleOrDefault<Entities.User>("Select * from [User] Where UserId = @0", a.ContactId);
+                var b = db2.SingleOrDefault<Entities.AspNetUsers>("Select * from AspNetUsers Where Id = @0", a.ContactId);
                 contactlist.Add(b);
             }
 

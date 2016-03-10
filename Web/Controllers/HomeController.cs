@@ -14,5 +14,26 @@ namespace Storytime.Controllers
 
             return View();
         }
+
+        public ActionResult Products()
+        {
+            ViewBag.Title = "Products";
+
+            return View();
+        }
+
+        public ActionResult AboutUs()
+        {
+            ViewBag.Title = "About Us";
+
+            return View();
+        }
+
+        public ActionResult ContactUs()
+        {
+            ViewBag.Title = "Contact Us";
+
+            return View();
+        }
     }
 }

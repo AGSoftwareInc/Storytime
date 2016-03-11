@@ -236,9 +236,9 @@ C:\Storytime\Web\bin\System.Web.WebPages.xml
 C:\Storytime\Web\bin\System.Web.WebPages.Deployment.xml
 C:\Storytime\Web\bin\System.Web.WebPages.Razor.xml
 C:\Storytime\Web\obj\Debug\Storytime.csprojResolveAssemblyReference.cache
-C:\Storytime\Web\obj\Debug\Storytime.dll
-C:\Storytime\Web\obj\Debug\Storytime.pdb
 C:\Storytime\Web\obj\Debug\Storytime.Migrations.InitialCreate.resources
-C:\Storytime\Web\obj\Debug\Storytime.csproj.GenerateResource.Cache
 C:\Storytime\Web\obj\Debug\Storytime.Migrations.FirstNameLastName.resources
 C:\Storytime\Web\obj\Debug\Storytime.Migrations.DateCreated.resources
+C:\Storytime\Web\obj\Debug\Storytime.csproj.GenerateResource.Cache
+C:\Storytime\Web\obj\Debug\Storytime.dll
+C:\Storytime\Web\obj\Debug\Storytime.pdb

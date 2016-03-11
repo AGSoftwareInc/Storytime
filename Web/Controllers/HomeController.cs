@@ -35,5 +35,12 @@ namespace Storytime.Controllers
 
             return View();
         }
+
+        public ActionResult PrivacyPolicy()
+        {
+            ViewBag.Title = "Privacy Policy";
+
+            return View();
+        }
     }
 }

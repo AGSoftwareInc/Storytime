@@ -245,6 +245,7 @@
     <Content Include="Content\Images\img01.gif" />
     <Content Include="Content\Images\img02.gif" />
     <Content Include="Content\Images\img03.jpg" />
+    <Content Include="Content\Images\logo300x300.jpg" />
     <Content Include="Content\Images\spacer.gif" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />

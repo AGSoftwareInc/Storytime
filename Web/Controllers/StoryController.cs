@@ -22,16 +22,16 @@ namespace Storytime.Controllers
     {
         private readonly IBlobService _service = new BlobService();
 
-        //[HttpPost]
-        //public IHttpActionResult Post([FromUri] string id, [FromBody]Entities.StorytimePost storytimepost)
-        //{
-        //    storytimepost.DateCreated = System.DateTime.Now;
-        //    var db = new PetaPoco.Database("AGSoftware");
+        [HttpPost]
+        public IHttpActionResult Post([FromUri] string id, [FromBody]Entities.StorytimePost storytimepost)
+        {
+            storytimepost.DateCreated = System.DateTime.Now;
+            var db = new PetaPoco.Database("AGSoftware");
 
-        //    db.Insert(storytimepost);
+            db.Insert(storytimepost);
 
-        //    return Ok();
-        //}
+            return Ok();
+        }
         [HttpPost]
         public async Task<HttpResponseMessage> UploadImage()
         {

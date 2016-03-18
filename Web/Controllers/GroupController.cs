@@ -30,7 +30,7 @@ namespace Storytime.Controllers
                 db2.Insert(usergroupuser);
             }
 
-           return Ok();
+           return Ok(usergroup.UserGroupId);
         }
 
         [HttpGet]

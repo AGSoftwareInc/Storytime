@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Entities
 {
-    public class StorytimeGroup
+    public class StorytimeUserList
     {
-        public int StorytimeGroupId { get; set; }
+        public int StorytimeUserListId { get; set; }
         public int StorytimeId { get; set; }
-        public int UserGroupId { get; set; }
+        public string UserId { get; set; }
     }
 }

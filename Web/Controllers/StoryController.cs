@@ -1,4 +1,5 @@
 ﻿using Entities;
+using PetaPoco;
 using Storytime.Providers;
 using System;
 using System.Collections.Generic;
@@ -22,11 +23,13 @@ namespace Storytime.Controllers
     {
         private readonly IBlobService _service = new BlobService();
 
+        private Database db = new PetaPoco.Database("AGSoftware");
+
         [HttpPost]
         public IHttpActionResult Post([FromUri] string id, [FromBody]Entities.StorytimePost storytimepost)
         {
             storytimepost.DateCreated = System.DateTime.Now;
-            var db = new PetaPoco.Database("AGSoftware");
+           // var db = new PetaPoco.Database("AGSoftware");
 
             db.Insert(storytimepost);
 
@@ -50,6 +53,13 @@ namespace Storytime.Controllers
 
             //return positive respnse...
             return await Task.FromResult(Request.CreateResponse(HttpStatusCode.OK, String.Format("Successfully Uploaded File. String recieved: {0}", value)));
+        }
+        [HttpGet]
+        public IHttpActionResult GetStorySeries([FromUri] int groupId, int storyId, int seriesId)
+        {
+            var sql = @""
+
+            return Ok();
         }
     }
 }

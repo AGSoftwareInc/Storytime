@@ -203,7 +203,7 @@
     <Compile Include="Controllers\GroupController.cs" />
     <Compile Include="Controllers\GroupUserController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\ImageController.cs" />
+    <Compile Include="Controllers\StorytimePostController.cs" />
     <Compile Include="Controllers\PasswordController.cs" />
     <Compile Include="Controllers\StoryController.cs" />
     <Compile Include="Controllers\UserController.cs" />
@@ -230,9 +230,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
     <Compile Include="Providers\BlobHelper.cs" />
-    <Compile Include="Providers\BlobService.cs" />
-    <Compile Include="Providers\BlobStorageUploadProvider.cs" />
-    <Compile Include="Providers\MultiPartMediaTypeFormatter.cs" />
     <Compile Include="Providers\UserHelper.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
     <Compile Include="Startup.cs" />
@@ -287,7 +284,8 @@
     <Content Include="Views\Home\ContactUs.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\Images\" />
+    <Folder Include="App_Data\" />
+    <Folder Include="Content\Upload\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

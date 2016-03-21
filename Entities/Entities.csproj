@@ -41,7 +41,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AspNetUsers.cs" />
-    <Compile Include="BlobUploadModel.cs" />
     <Compile Include="Contact.cs" />
     <Compile Include="ContactList.cs" />
     <Compile Include="Email.cs" />

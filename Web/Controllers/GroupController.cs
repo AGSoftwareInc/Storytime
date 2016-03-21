@@ -34,14 +34,12 @@ namespace Storytime.Controllers
         }
 
         [HttpGet]
-        public IHttpActionResult Get(string page)
+        public IHttpActionResult Get(string page, string count)
         {
-            long itemsPerPage = 10;
-
             var db = new PetaPoco.Database("AGSoftware");
             string userid = Storytime.Providers.UserHelper.GetUserId(this.User.Identity.Name);
 
-            var b = db.Page<Entities.UserGroup>(int.Parse(page), itemsPerPage, "Select * from UserGroup Where UserId = @0", new object[] { userid });
+            var b = db.Page<Entities.UserGroup>(int.Parse(page), int.Parse(count), "Select * from UserGroup Where UserId = @0", new object[] { userid });
 
             if (b.Items.Count > 0)
             {

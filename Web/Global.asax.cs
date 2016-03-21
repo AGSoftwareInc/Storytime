@@ -21,14 +21,6 @@ namespace Storytime
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-            GlobalConfiguration.Configuration.Formatters.Add(new MultipartMediaTypeFormatter());
-
-
-        }
-
-        protected static void Bootstrap()
-        {
-       
         }
     }
 }

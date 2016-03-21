@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web;
 using System.Net.Http;
 using System.Web.Http;
@@ -10,15 +11,16 @@ using System.Web.Http;
 namespace Storytime.Controllers
 {
     [Authorize]
-    public class ImageController : ApiController
+    public class StorytimePostController : ApiController
     {
         [HttpPost]
-        public IHttpActionResult Post([FromUri] string id, [FromBody]HttpPostedFileBase file)
+        public IHttpActionResult Post()
         {
+            var file = HttpContext.Current.Request.Files[0];
             if (file != null)
             {
                 string pic = System.IO.Path.GetFileName(file.FileName);
-                string path = System.IO.Path.Combine(System.Web.HttpContext.Current.Server.MapPath("~/images/profile"), pic);
+                string path = System.IO.Path.Combine(System.Web.HttpContext.Current.Server.MapPath("~/Content/Upload"), pic);
                 // file is uploaded
                 file.SaveAs(path);
 
@@ -31,7 +33,18 @@ namespace Storytime.Controllers
                     byte[] array = ms.GetBuffer();
                 }
 
-                return Ok();
+                var db = new PetaPoco.Database("AGSoftware");
+
+                Entities.StorytimePost storytimepost = new Entities.StorytimePost();
+                storytimepost.DateCreated = System.DateTime.Now;
+                storytimepost.ImagePath = path;
+                storytimepost.PostText = HttpContext.Current.Request.Form["posttext"];
+                storytimepost.UserId = Storytime.Providers.UserHelper.GetUserId(HttpContext.Current.User.Identity.Name);
+                storytimepost.StorytimeId = int.Parse(HttpContext.Current.Request.Form["storytimeid"]);
+
+                db.Insert(storytimepost);
+
+                return Ok(storytimepost.StorytimePostId);
             }
             else
             {

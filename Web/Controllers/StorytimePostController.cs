@@ -24,15 +24,6 @@ namespace Storytime.Controllers
                 // file is uploaded
                 file.SaveAs(path);
 
-                // save the image path path to the database or you can send image 
-                // directly to database
-                // in-case if you want to store byte[] ie. for DB
-                using (MemoryStream ms = new MemoryStream())
-                {
-                    file.InputStream.CopyTo(ms);
-                    byte[] array = ms.GetBuffer();
-                }
-
                 var db = new PetaPoco.Database("AGSoftware");
 
                 Entities.StorytimePost storytimepost = new Entities.StorytimePost();
@@ -58,6 +49,8 @@ namespace Storytime.Controllers
             var db = new PetaPoco.Database("AGSoftware");
 
             var a = db.SingleOrDefault<Entities.StorytimePost>("Select * from StorytimePost Where StorytimePostId = @0", id);
+            a.ImagePath = a.ImagePath.Replace("C:\\Storytime\\Web\\", "http://" + System.Configuration.ConfigurationManager.AppSettings["Server"] + @"\");
+            a.ImagePath = a.ImagePath.Replace(@"\", @"/");
             return Ok(a);
         }
     }

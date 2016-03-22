@@ -203,6 +203,7 @@
     <Compile Include="Controllers\GroupController.cs" />
     <Compile Include="Controllers\GroupUserController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\StoryListController.cs" />
     <Compile Include="Controllers\StorytimePostController.cs" />
     <Compile Include="Controllers\PasswordController.cs" />
     <Compile Include="Controllers\StoryController.cs" />
@@ -229,7 +230,6 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
-    <Compile Include="Providers\BlobHelper.cs" />
     <Compile Include="Providers\UserHelper.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
     <Compile Include="Startup.cs" />

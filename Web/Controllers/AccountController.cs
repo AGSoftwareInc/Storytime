@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Net;
 using System.Net.Http;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -337,7 +339,16 @@ namespace Storytime.Controllers
                 return GetErrorResult(result);
             }
 
-            return Ok();
+            string token;
+
+            using (WebClient client = new WebClient())
+            {
+                client.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
+                string server = "http://" + ConfigurationManager.AppSettings["Server"] + "/Token";
+                token = client.UploadString(server, "POST", "grant_type=password&username=" + model.Email + "&password=" + model.Password);
+            }
+
+            return Ok(token);
         }
 
         // POST api/Account/RegisterExternal

@@ -30,29 +30,22 @@ namespace Storytime.Controllers
                 db2.Insert(usergroupuser);
             }
 
-           return Ok();
+           return Ok(usergroup.UserGroupId);
         }
 
         [HttpGet]
-        public IHttpActionResult Get(string id)
+        public IHttpActionResult Get(string page)
         {
+            long itemsPerPage = 10;
+
             var db = new PetaPoco.Database("AGSoftware");
+            string userid = Storytime.Providers.UserHelper.GetUserId(this.User.Identity.Name);
 
-            var b = db.SingleOrDefault<Entities.UserGroup>("Select * from UserGroup Where UserGroupId = @0", id);
+            var b = db.Page<Entities.UserGroup>(int.Parse(page), itemsPerPage, "Select * from UserGroup Where UserId = @0", new object[] { userid });
 
-            if (b != null)
+            if (b.Items.Count > 0)
             {
-                System.Collections.Generic.List<Entities.AspNetUsers> grouplist = new List<Entities.AspNetUsers>();
-
-                foreach (var c in db.Query<Entities.ContactList>("Select * from UserGroupUser Where GroupId = @0", b.UserGroupId))
-                {
-                    //todo see if there is a better way to do this with normalization and/or one connection.
-                    var db2 = new PetaPoco.Database("AGSoftware");
-                    var d = db2.SingleOrDefault<Entities.AspNetUsers>("Select * from AspNetUsers Where Id = @0", c.UserId);
-                    grouplist.Add(d);
-                }
-
-                return Ok(grouplist);
+                return Ok(b.Items);
             }
             else
             {

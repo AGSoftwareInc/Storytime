@@ -21,7 +21,12 @@ namespace Storytime
                       "~/Scripts/respond.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                      "~/Content/CorporateWebsite.css"));
+     
+                      "~/Content/css/bootstrap.min.css",
+                   
+                      "~/fonts/font-awesome/css/font-awesome.min.css",
+                      "~/Content/css/animate.min.css"
+                      ));
         }
     }
 }

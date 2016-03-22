@@ -19,8 +19,43 @@ using System.Web.Http.Description;
 
 namespace Storytime.Controllers
 {
+    [Authorize]
     public class StoryController : ApiController
     {
+        [HttpPost]
+        public IHttpActionResult Post([FromUri] string id, [FromBody]Entities.Storytime storytime)
+        {
+            var db = new PetaPoco.Database("AGSoftware");
+            storytime.DateCreated = System.DateTime.Now;
+            storytime.UserId = Storytime.Providers.UserHelper.GetUserId(this.User.Identity.Name);
+            db.Insert(storytime);
+
+            if (storytime.StorytimeType == StorytimeType.Group)
+            {
+                StorytimeGroup storytimegroup = new StorytimeGroup();
+                storytimegroup.StorytimeId = storytime.StorytimeId;
+                storytimegroup.StorytimeGroupId = storytime.StorytimeGroupId;
+                db.Insert(storytimegroup);
+
+                return Ok(storytime.StorytimeId);
+            }
+            else if (storytime.StorytimeType == StorytimeType.User)
+            {
+                StorytimeUserList storytimeuserlist = new StorytimeUserList();
+
+                foreach (AspNetUsers user in storytime.Users)
+                {
+                    storytimeuserlist.StorytimeId = storytime.StorytimeId;
+                    storytimeuserlist.UserId = user.Id;
+                    db.Insert(storytimeuserlist);
+                }
+
+                return Ok(storytime.StorytimeId);
+            }
+            else
+                return BadRequest("StorytimeType is invalid");
+        }
+
         private readonly IBlobService _service = new BlobService();
 
         private Database db = new PetaPoco.Database("AGSoftware");
@@ -57,8 +92,7 @@ namespace Storytime.Controllers
         [HttpGet]
         public IHttpActionResult GetStorySeries([FromUri] int groupId, int storyId, int seriesId)
         {
-            var sql = @""
-
+            var sql = @"";
             return Ok();
         }
     }

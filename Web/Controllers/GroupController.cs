@@ -43,7 +43,7 @@ namespace Storytime.Controllers
 
             if (b.Items.Count > 0)
             {
-                return Ok(b.Items);
+                return Ok(b);
             }
             else
             {

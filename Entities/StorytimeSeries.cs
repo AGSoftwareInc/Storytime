@@ -6,15 +6,11 @@ using System.Threading.Tasks;
 
 namespace Entities
 {
-    public class StorytimePost
+    public class StorytimeSeries
     {
-        public int StorytimePostId { get; set; }
         public int StorytimeId { get; set; }
-        public int SeriesId { get; set; }
+        public int StorytimeSeriesId { get; set; }
         public string UserId { get; set; }
-        public string PostText { get; set; }
-        public string ImagePath { get; set; }
-        public int Votes { get; set; }
         public DateTime DateCreated { get; set; }
     }
 }

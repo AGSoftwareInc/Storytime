@@ -32,6 +32,7 @@ namespace Storytime.Controllers
                 storytimepost.PostText = HttpContext.Current.Request.Form["posttext"];
                 storytimepost.UserId = Storytime.Providers.UserHelper.GetUserId(HttpContext.Current.User.Identity.Name);
                 storytimepost.StorytimeId = int.Parse(HttpContext.Current.Request.Form["storytimeid"]);
+                storytimepost.SeriesId = int.Parse(HttpContext.Current.Request.Form["SeriesId"]);
 
                 db.Insert(storytimepost);
 

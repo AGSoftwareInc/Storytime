@@ -51,6 +51,7 @@
       <DependentUpon>Database.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PetaPoco.cs" />
+    <Compile Include="StorytimeSeries.cs" />
     <Compile Include="Storytime.cs" />
     <Compile Include="StorytimeGroup.cs" />
     <Compile Include="StorytimePost.cs" />
@@ -58,6 +59,7 @@
     <Compile Include="StorytimeUserList.cs" />
     <Compile Include="UserGroup.cs" />
     <Compile Include="UserGroupUser.cs" />
+    <Compile Include="Vote.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

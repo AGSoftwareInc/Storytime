@@ -1,0 +1,5 @@
+C:\Storytime\Entities\bin\Release\Entities.dll.config
+C:\Storytime\Entities\bin\Release\Entities.dll
+C:\Storytime\Entities\bin\Release\Entities.pdb
+C:\Storytime\Entities\obj\Release\Entities.dll
+C:\Storytime\Entities\obj\Release\Entities.pdb

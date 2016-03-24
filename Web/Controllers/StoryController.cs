@@ -19,7 +19,6 @@ using System.Web.Http.Description;
 namespace Storytime.Controllers
 {
     [Authorize]
-    [RoutePrefix("api/Story")]
     public class StoryController : ApiController
     {
         [HttpPost]
@@ -54,24 +53,6 @@ namespace Storytime.Controllers
             }
             else
                 return BadRequest("StorytimeType is invalid");
-        }
-
-        [HttpGet]
-        public IHttpActionResult Get(string id)
-        {
-            var db = new PetaPoco.Database("AGSoftware");
-
-            System.Collections.Generic.List<Entities.StorytimePost> storytimewinnerlist = new List<StorytimePost>();
-
-            foreach (var a in db.Query<Entities.StorytimePost>("Select * From StoryTimePost Where StorytimeId = @0 Group By UserId, StorytimeId, SeriesId, StorytimePostId, PostText, ImagePath, Votes, DateCreated Order By Votes Desc", id))
-            {
-                storytimewinnerlist.Add(a);
-            }
-
-            if (storytimewinnerlist.Count > 0)
-                return Ok(storytimewinnerlist);
-            else
-                return NotFound();
         }
     }
 }

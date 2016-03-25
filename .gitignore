@@ -1,6 +1,9 @@
-﻿packages/
+packages/
 Web/bin
 Entities/bin
 Web/obj
 Entities/obj
+*.cache
+Web/packages
+obj/
 Web/Storytime.v12.suo

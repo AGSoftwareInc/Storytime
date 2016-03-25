@@ -1,4 +1,5 @@
 ﻿using Entities;
+using PetaPoco;
 using Storytime.Providers;
 using System;
 using System.Collections.Generic;
@@ -65,7 +66,7 @@ namespace Storytime.Controllers
             System.Collections.Generic.List<Entities.StorytimePost> storytimewinnerlist = new List<StorytimePost>();
 
             foreach (var a in db.Query<Entities.StorytimePost>("Select * From StoryTimePost Where StorytimeId = @0 Group By UserId, StorytimeId, SeriesId, StorytimePostId, PostText, ImagePath, Votes, DateCreated Order By Votes Desc", id))
-            {
+        {
                 storytimewinnerlist.Add(a);
             }
 

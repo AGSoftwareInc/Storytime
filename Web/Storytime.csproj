@@ -234,36 +234,11 @@
     <Content Include="Content\css\bootstrap.min.css" />
     <Content Include="Content\css\creative.css" />
     <Content Include="Content\css\bootstrap.css" />
-    <Content Include="Content\css\creative.min.css" />
     <Content Include="Content\font-awesome\css\font-awesome.css" />
     <Content Include="Content\font-awesome\css\font-awesome.min.css" />
     <Content Include="Content\font-awesome\fonts\fontawesome-webfont.svg" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
-    <Content Include="Content\Images\1.jpg" />
-    <Content Include="Content\Images\2.jpg" />
-    <Content Include="Content\Images\3.jpg" />
-    <Content Include="Content\Images\4.jpg" />
-    <Content Include="Content\Images\5.jpg" />
-    <Content Include="Content\Images\6.jpg" />
-    <Content Include="Content\Images\header.jpg" />
-    <Content Include="Content\Images\img01.gif" />
-    <Content Include="Content\Images\img02.gif" />
-    <Content Include="Content\Images\img03.jpg" />
-    <Content Include="Content\Images\logo300x300.jpg" />
-    <Content Include="Content\Images\portfolio\1.jpg" />
-    <Content Include="Content\Images\portfolio\2.jpg" />
-    <Content Include="Content\Images\portfolio\3.jpg" />
-    <Content Include="Content\Images\portfolio\4.jpg" />
-    <Content Include="Content\Images\portfolio\5.jpg" />
-    <Content Include="Content\Images\portfolio\6.jpg" />
-    <Content Include="Content\Images\spacer.gif" />
     <Content Include="Content\img\header.jpg" />
-    <Content Include="Content\img\portfolio\1.jpg" />
-    <Content Include="Content\img\portfolio\2.jpg" />
-    <Content Include="Content\img\portfolio\3.jpg" />
-    <Content Include="Content\img\portfolio\4.jpg" />
-    <Content Include="Content\img\portfolio\5.jpg" />
-    <Content Include="Content\img\portfolio\6.jpg" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Images\1.jpg" />
@@ -288,7 +263,6 @@
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\cbpAnimatedHeader.js" />
     <Content Include="Scripts\classie.js" />
-    <Content Include="Scripts\creative.js" />
     <Content Include="Content\font-awesome\fonts\fontawesome-webfont.eot" />
     <Content Include="Content\font-awesome\fonts\fontawesome-webfont.ttf" />
     <Content Include="Content\font-awesome\fonts\fontawesome-webfont.woff" />
@@ -324,12 +298,8 @@
     <Content Include="Content\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.woff" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.woff2" />
-    <Content Include="Scripts\creative.min.js" />
-    <Content Include="Scripts\jquery.easing.min.js" />
-    <Content Include="Scripts\jquery.fittext.js" />
     <Content Include="Scripts\jquery.js" />
     <None Include="Views\Home\PrivacyPolicy.cshtml" />
-    <Content Include="Scripts\wow.min.js" />
     <None Include="Views\Home\index.cshtml" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -339,7 +309,6 @@
       <DependentUpon>Web.config</DependentUpon>
     </Content>
     <Content Include="Areas\HelpPage\Views\_ViewStart.cshtml" />
-    <Content Include="Scripts\_references.js" />
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Home\Index2.cshtml" />
@@ -351,6 +320,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\Images\" />
+    <Folder Include="Content\Images\" />
+    <Folder Include="Content\img\portfolio\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

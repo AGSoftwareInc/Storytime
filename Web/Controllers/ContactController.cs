@@ -25,11 +25,7 @@ namespace Storytime.Controllers
 
                     if (iscontact != null)
                     {
-                        newcontactlist.Add(new Entities.Contact(iscontact.Id, iscontact.PhoneNumber, true));
-                    }
-                    else
-                    {
-                        newcontactlist.Add(new Entities.Contact("", contact.PhoneNumber, false));
+                        newcontactlist.Add(new Entities.Contact(iscontact.Id, iscontact.PhoneNumber, contact.FirstName, contact.LastName));
                     }
                 }
 

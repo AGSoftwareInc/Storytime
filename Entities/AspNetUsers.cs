@@ -11,9 +11,10 @@ namespace Entities
         public string Id { get; set; }
         public string Email { get; set; }
         public string UserName { get; set; }
-        public string Password { get; set; }
+        public string PasswordHash { get; set; }
         public string PhoneNumber { get; set; }
-        public string UUID { get; set; }
+        public string DeviceToken { get; set; }
+        public string UDID { get; set; }
         public DateTime DateCreated { get; set; }
 
     }

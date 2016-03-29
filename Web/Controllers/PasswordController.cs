@@ -23,7 +23,7 @@ namespace Storytime.Controllers
             email.To.Add(a.Email);
             email.From = "info@agsoftwareinc.com";
             email.Subject = "Username/Password";
-            email.Body = "<p><strong>Hello</strong></p><p>Username: " + a.UserName + "</p><p>Password: " + a.Password + "</p>";
+            email.Body = "<p><strong>Hello</strong></p><p>Username: " + a.UserName + "</p><p>Password: " + a.PasswordHash + "</p>";
             email.Send();
 
             if (a != null)

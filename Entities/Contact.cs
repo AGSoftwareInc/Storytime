@@ -8,11 +8,12 @@ namespace Entities
 {
     public class Contact
     {
-        public Contact(string userid, string phonenumber, bool usesapp)
+        public Contact(string userid, string phonenumber, string firstname, string lastname)
         {
             this.UserId = userid;
             this.PhoneNumber = phonenumber;
-            this.UsesApp = usesapp;
+            this.FirstName = firstname;
+            this.LastName = lastname;
         }
 
         public Contact() { }
@@ -20,8 +21,7 @@ namespace Entities
         public string UserId { get; set; }
         public string Name { get; set; }
         public string PhoneNumber { get; set; }
-
-        [PetaPoco.Ignore]
-        public bool UsesApp { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
     }
 }

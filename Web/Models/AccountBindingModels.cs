@@ -57,8 +57,8 @@ namespace Storytime.Models
         public string PhoneNumber { get; set; }
 
         [Required]
-        [Display(Name = "UUID")]
-        public string UUID { get; set; }
+        [Display(Name = "UDID")]
+        public string UDID { get; set; }
 
         [Display(Name = "Date Created")]
         public DateTime DateCreated { get; set; }

@@ -200,6 +200,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ContactController.cs" />
     <Compile Include="Controllers\ContactListController.cs" />
+    <Compile Include="Controllers\DeviceTokenController.cs" />
     <Compile Include="Controllers\GroupController.cs" />
     <Compile Include="Controllers\GroupUserController.cs" />
     <Compile Include="Controllers\HomeController.cs" />

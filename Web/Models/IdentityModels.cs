@@ -13,6 +13,8 @@ namespace Storytime.Models
         public string LastName { get; set; }
 
         public System.DateTime DateCreated { get; set; }
+
+        public string UUID { get; set; }
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager, string authenticationType)
         {
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType

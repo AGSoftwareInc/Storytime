@@ -60,6 +60,9 @@ namespace Storytime.Models
         [Display(Name = "UDID")]
         public string UDID { get; set; }
 
+        [Display(Name = "Device Token")]
+        public string DeviceToken { get; set; }
+
         [Display(Name = "Date Created")]
         public DateTime DateCreated { get; set; }
     }

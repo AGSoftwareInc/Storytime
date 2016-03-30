@@ -330,7 +330,7 @@ namespace Storytime.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = new ApplicationUser() { UserName = model.Email, Email = model.Email, PhoneNumber = model.PhoneNumber, FirstName = model.FirstName, LastName = model.LastName, DateCreated = System.DateTime.Now, UDID = model.UDID };
+            var user = new ApplicationUser() { UserName = model.Email, Email = model.Email, PhoneNumber = model.PhoneNumber, FirstName = model.FirstName, LastName = model.LastName, DateCreated = System.DateTime.Now, UDID = model.UDID, DeviceToken = model.DeviceToken };
 
             IdentityResult result = await UserManager.CreateAsync(user, model.Password);
 

@@ -13,6 +13,7 @@ namespace Storytime
         public static void Register(HttpConfiguration config)
         {
             // Web API configuration and services
+            config.Filters.Add(new Storytime.Filters.CustomExceptionFilterAttribute());
             // Configure Web API to use only bearer token authentication.
             config.SuppressDefaultHostAuthentication();
             config.Filters.Add(new HostAuthenticationFilter(OAuthDefaults.AuthenticationType));
@@ -26,12 +27,7 @@ namespace Storytime
                 defaults: new { id = RouteParameter.Optional }
 
             );
-            config.Routes.MapHttpRoute(
-                  name: "PostBlobUpload",
-                  routeTemplate: "api/{controller}/{action}",
-                  defaults: new { controller = "StoryController", action = "Series" }
-                                   
-      );
+        
 
         }
     }

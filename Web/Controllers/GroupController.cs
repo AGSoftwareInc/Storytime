@@ -26,7 +26,7 @@ namespace Storytime.Controllers
                 var db2 = new PetaPoco.Database("AGSoftware");
                 usergroupuser = new Entities.UserGroupUser();
                 usergroupuser.GroupId = usergroup.UserGroupId;
-                usergroupuser.UserId = db2.SingleOrDefault<Entities.AspNetUsers>("Select Id from AspNetUsers where PhoneNumber = @0", user.PhoneNumber).Id; ;
+                usergroupuser.UserId = db2.SingleOrDefault<Entities.AspNetUsers>("Select Id from AspNetUsers where Id = @0", user.Id).Id; ;
                 db2.Insert(usergroupuser);
             }
 

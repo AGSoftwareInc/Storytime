@@ -23,7 +23,7 @@ namespace Storytime.Controllers
                 System.Collections.Generic.List<Entities.StorytimePost> storytimepostlist = new List<Entities.StorytimePost>();
 
 
-                foreach (var c in db.Query<Entities.StorytimePost>("Select * from StorytimePOst Where StorytimeId = @0", id))
+                foreach (var c in db.Query<Entities.StorytimePost>("Select * from StorytimePost Where StorytimeId = @0", id))
                 {
                     c.ImagePath = c.ImagePath.Replace("C:\\Storytime\\Web\\", "http://" + System.Configuration.ConfigurationManager.AppSettings["Server"] + @"\");
                     c.ImagePath = c.ImagePath.Replace(@"\", @"/");

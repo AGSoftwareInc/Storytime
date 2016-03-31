@@ -39,6 +39,15 @@ namespace Storytime.Providers
                 return;
             }
 
+            if (context.Request.Headers["devicetoken"] != null)
+            {
+                if (user.DeviceToken != context.Request.Headers["devicetoken"])
+                {
+                    user.DeviceToken = context.Request.Headers["devicetoken"];
+                    userManager.Update(user);
+                }
+            }
+
             ClaimsIdentity oAuthIdentity = await user.GenerateUserIdentityAsync(userManager,
                OAuthDefaults.AuthenticationType);
             ClaimsIdentity cookiesIdentity = await user.GenerateUserIdentityAsync(userManager,

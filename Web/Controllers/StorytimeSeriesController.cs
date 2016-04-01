@@ -11,11 +11,10 @@ namespace Storytime.Controllers
     public class StorytimeSeriesController : ApiController
     {
         [HttpPost]
-        public IHttpActionResult Post([FromUri] string id)
+        public IHttpActionResult Post([FromUri] string id, [FromBody] Entities.StorytimeSeries storytimeseries) 
         {
             var db = new PetaPoco.Database("AGSoftware");
 
-            Entities.StorytimeSeries storytimeseries = new Entities.StorytimeSeries();
             storytimeseries.StorytimeId = int.Parse(id);
             storytimeseries.DateCreated = System.DateTime.Now;
             storytimeseries.UserId = Storytime.Providers.UserHelper.GetUserId(this.User.Identity.Name);

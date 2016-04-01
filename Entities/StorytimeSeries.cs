@@ -11,6 +11,7 @@ namespace Entities
         public int StorytimeId { get; set; }
         public int StorytimeSeriesId { get; set; }
         public string UserId { get; set; }
+        public string SeriesText { get; set; }
         public DateTime DateCreated { get; set; }
     }
 }

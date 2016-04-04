@@ -57,9 +57,21 @@ namespace Storytime.Controllers
                 return BadRequest("StorytimeType is invalid");
         }
 
+        [Route("GetStory")]
+        public IHttpActionResult GetStory(string id)
+        {
+            var db = new PetaPoco.Database("AGSoftware");
 
-        [HttpGet]
-        public IHttpActionResult Get(string id)
+            Entities.Storytime storytime = db.SingleOrDefault<Entities.Storytime>("Select * From StoryTime Where StorytimeId = @0", id);
+
+            if (storytime != null)
+                return Ok(storytime);
+            else
+                return NotFound();
+        }
+
+        [Route("GetWinner")]
+        public IHttpActionResult GetWinner(string id)
         {
             var db = new PetaPoco.Database("AGSoftware");
 

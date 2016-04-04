@@ -8,6 +8,7 @@ using System.Web.Http;
 namespace Storytime.Controllers
 {
     [Authorize]
+
     public class StorytimeSeriesController : ApiController
     {
         [HttpPost]

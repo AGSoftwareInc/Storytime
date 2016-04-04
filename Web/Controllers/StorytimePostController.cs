@@ -50,9 +50,18 @@ namespace Storytime.Controllers
             var db = new PetaPoco.Database("AGSoftware");
 
             var a = db.SingleOrDefault<Entities.StorytimePost>("Select * from StorytimePost Where StorytimePostId = @0", id);
-            a.ImagePath = a.ImagePath.Replace("C:\\Storytime\\Web\\", "http://" + System.Configuration.ConfigurationManager.AppSettings["Server"] + @"\");
-            a.ImagePath = a.ImagePath.Replace(@"\", @"/");
-            return Ok(a);
+
+            if (a != null)
+            {
+                a.ImagePath = a.ImagePath.Replace("C:\\Storytime\\Web\\", "http://" + System.Configuration.ConfigurationManager.AppSettings["Server"] + @"\");
+                a.ImagePath = a.ImagePath.Replace(@"\", @"/");
+
+                return Ok(a);
+            }
+            else
+            {
+                return NotFound();
+            }
         }
     }
 }

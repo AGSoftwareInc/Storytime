@@ -212,6 +212,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LogErrorController.cs" />
     <Compile Include="Controllers\SeriesListController.cs" />
+    <Compile Include="Controllers\StorytimePostListController.cs" />
     <Compile Include="Controllers\StorytimeSeriesController.cs" />
     <Compile Include="Controllers\StoryListController.cs" />
     <Compile Include="Controllers\StorytimePostController.cs" />

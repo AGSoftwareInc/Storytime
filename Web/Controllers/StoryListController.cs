@@ -24,13 +24,9 @@ namespace Storytime.Controllers
             }
 
             if (storytimelist.Count > 0)
-            {
                 return Ok(storytimelist);
-            }
             else
-            {
                 return NotFound();
-            }
         }
     }
 }

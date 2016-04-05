@@ -40,13 +40,9 @@ namespace Storytime.Controllers
             }
 
             if (storytimepostlist.Count > 0)
-            {
                 return Ok(storytimepostlist);
-            }
             else
-            {
                 return NotFound();
-            }
         }
     }
 }

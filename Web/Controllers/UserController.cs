@@ -16,8 +16,11 @@ namespace Storytime.Controllers
             var db = new PetaPoco.Database("AGSoftware");
 
             var a = db.SingleOrDefault<Entities.AspNetUsers>("Select * from AspNetUsers Where UserId = @0", id);
-            return Ok(a);
 
+            if (a != null)
+                return Ok(a);
+            else
+                return NotFound();
         }
     }
 }

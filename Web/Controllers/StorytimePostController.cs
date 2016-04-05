@@ -17,6 +17,7 @@ namespace Storytime.Controllers
         public IHttpActionResult Post()
         {
             var file = HttpContext.Current.Request.Files[0];
+
             if (file != null)
             {
                 string pic = System.IO.Path.GetFileName(file.FileName);
@@ -40,7 +41,7 @@ namespace Storytime.Controllers
             }
             else
             {
-                return NotFound();
+                return BadRequest("File upload missing.");
             }
         }
 

@@ -11,11 +11,16 @@ namespace Entities
         public int StorytimeId { get; set; }
         public string StorytimeTitle { get; set; }
         public DateTime DateCreated { get; set; }
-        private int storytimetypeid; 
+        private int storytimetypeid;
+        private StorytimeType storytimetype;
         public int StorytimeTypeId
         {
             get { return (int)this.StorytimeType; }
-            set { this.storytimetypeid = value; }
+            set
+            { 
+                this.storytimetypeid = value;
+                this.storytimetype = (Entities.StorytimeType)value;
+            }
         }
         public string UserId { get; set; }
 
@@ -29,7 +34,11 @@ namespace Entities
         public int StorytimeGroupId { get; set; }
 
         [PetaPoco.Ignore]
-        public StorytimeType StorytimeType { get; set; }
+        public StorytimeType StorytimeType 
+        {
+            get { return this.storytimetype; }
+            set { this.storytimetype = value; }
+        }
 
     }
 }

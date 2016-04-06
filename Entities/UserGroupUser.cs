@@ -9,6 +9,6 @@ namespace Entities
     public class UserGroupUser
     {
         public string UserId { get; set; }
-        public int GroupId { get; set; }
+        public int UserGroupId { get; set; }
     }
 }

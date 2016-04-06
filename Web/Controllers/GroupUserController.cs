@@ -21,7 +21,7 @@ namespace Storytime.Controllers
             {
                 System.Collections.Generic.List<Entities.AspNetUsers> grouplist = new List<Entities.AspNetUsers>();
 
-                foreach (var c in db.Query<Entities.ContactList>("Select * from UserGroupUser Where GroupId = @0", b.UserGroupId))
+                foreach (var c in db.Query<Entities.ContactList>("Select * from UserGroupUser Where UserGroupId = @0", b.UserGroupId))
                 {
                     //todo see if there is a better way to do this with normalization and/or one connection.
                     var db2 = new PetaPoco.Database("AGSoftware");

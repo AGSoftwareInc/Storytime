@@ -16,18 +16,17 @@ namespace Storytime.Controllers
         {
             var db = new PetaPoco.Database("AGSoftware");
 
-
             var a = db.SingleOrDefault<Entities.AspNetUsers>("Select * from AspNetUsers Where Email = @0", emailaddress);
-
-            Email email = new Email(ConfigurationManager.AppSettings["EmailHost"]);
-            email.To.Add(a.Email);
-            email.From = "info@agsoftwareinc.com";
-            email.Subject = "Username/Password";
-            email.Body = "<p><strong>Hello</strong></p><p>Username: " + a.UserName + "</p><p>Password: " + a.PasswordHash + "</p>";
-            email.Send();
 
             if (a != null)
             {
+                Email email = new Email(ConfigurationManager.AppSettings["EmailHost"]);
+                email.To.Add(a.Email);
+                email.From = "info@agsoftwareinc.com";
+                email.Subject = "Username/Password";
+                email.Body = "<p><strong>Hello</strong></p><p>Username: " + a.UserName + "</p><p>Password: " + a.PasswordHash + "</p>";
+                email.Send();
+
                 return Ok();
             }
             else

@@ -18,6 +18,12 @@ namespace Storytime
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
+
+            routes.MapRoute(
+                name: "ResetPassword",
+                url: "{controller}/{action}/{id}",
+                defaults: new { controller = "ResetPassword", action = "ResetPassword", id = UrlParameter.Optional }
+                );
         }
     }
 }

@@ -217,6 +217,7 @@
     <Compile Include="Controllers\GroupUserController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LogErrorController.cs" />
+    <Compile Include="Controllers\ResetPasswordController.cs" />
     <Compile Include="Controllers\SeriesListController.cs" />
     <Compile Include="Controllers\StorytimePostListController.cs" />
     <Compile Include="Controllers\StorytimeSeriesController.cs" />
@@ -344,6 +345,8 @@
     <Content Include="Views\Home\Products.cshtml" />
     <Content Include="Views\Home\AboutUs.cshtml" />
     <Content Include="Views\Home\ContactUs.cshtml" />
+    <Content Include="Views\ResetPassword\ResetPassword.cshtml" />
+    <Content Include="Views\ResetPassword\ResetPasswordConfirmation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\Images\" />

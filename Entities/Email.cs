@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Net.Mail;
+using System.Net;
 
 namespace Entities
 {
@@ -57,7 +58,11 @@ namespace Entities
             message.SubjectEncoding = System.Text.Encoding.UTF8;
             message.IsBodyHtml = true;
 
-            SmtpClient client = new SmtpClient(this.EmailHost);
+            var client = new SmtpClient(this.EmailHost, 587)
+            {
+                Credentials = new NetworkCredential("greg@agsoftwareinc.com", "2012Antoinette"),
+                EnableSsl = true
+            };
 
             client.Send(message);
         }

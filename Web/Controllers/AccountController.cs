@@ -156,6 +156,33 @@ namespace Storytime.Controllers
             return Ok();
         }
 
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IHttpActionResult> ForgotPassword(ForgotPasswordViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await UserManager.FindByNameAsync(model.Email);
+                if (user == null)
+                {
+                    // Don't reveal that the user does not exist or is not confirmed
+                    return Ok();
+                }
+
+                string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
+                string urlencoded = HttpUtility.UrlEncode(code);
+                //var callbackUrl = Url.Route("ResetPassword", new { userId = user.Id, code = code });
+                var callbackUrl = "http://" + ConfigurationManager.AppSettings["Server"] + "/resetpassword/resetpassword/forgotpassword?userId=" + user.Id + "&Code=" + urlencoded;
+                await UserManager.SendEmailAsync(user.Id, "Reset Password",
+                   "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                return Ok();
+            }
+            else
+            {
+                return BadRequest(ModelState);
+            }
+        }
+
         // POST api/Account/AddExternalLogin
         [Route("AddExternalLogin")]
         public async Task<IHttpActionResult> AddExternalLogin(AddExternalLoginBindingModel model)

@@ -4,6 +4,9 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Storytime.Models;
+using System.Configuration;
+using System.Net;
+using System.Net.Mail;
 
 namespace Storytime
 {
@@ -39,7 +42,28 @@ namespace Storytime
             {
                 manager.UserTokenProvider = new DataProtectorTokenProvider<ApplicationUser>(dataProtectionProvider.Create("ASP.NET Identity"));
             }
+
+            manager.EmailService = new EmailService();
+
             return manager;
+        }
+    }
+    public class EmailService : IIdentityMessageService
+    {
+        public Task SendAsync(IdentityMessage message)
+        {
+            var client = new SmtpClient("smtp.gmail.com", 587)
+            {
+                Credentials = new NetworkCredential("greg@agsoftwareinc.com", "2012Antoinette"),
+                EnableSsl = true
+            };
+
+            MailMessage mailmessage = new MailMessage("greg@agsoftwareinc.com", message.Destination);
+            mailmessage.IsBodyHtml = true;
+            mailmessage.Body = message.Body;
+            mailmessage.Subject = message.Subject;
+
+            return client.SendMailAsync(mailmessage);
         }
     }
 }

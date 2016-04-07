@@ -18,6 +18,7 @@ using Microsoft.Owin.Security.OAuth;
 using Storytime.Models;
 using Storytime.Providers;
 using Storytime.Results;
+using Twilio;
 
 namespace Storytime.Controllers
 {
@@ -332,6 +333,12 @@ namespace Storytime.Controllers
 
             var user = new ApplicationUser() { UserName = model.Email, Email = model.Email, PhoneNumber = model.PhoneNumber, FirstName = model.FirstName, LastName = model.LastName, DateCreated = System.DateTime.Now, UDID = model.UDID, DeviceToken = model.DeviceToken };
 
+            //todo generate random sms code to send to user.  they must then verify before registration is complete.
+            Random generator = new Random();
+            int r = generator.Next(100000, 999999);
+
+            user.SMSCode = r.ToString();
+
             IdentityResult result = await UserManager.CreateAsync(user, model.Password);
 
             if (!result.Succeeded)
@@ -339,6 +346,14 @@ namespace Storytime.Controllers
                 return GetErrorResult(result);
             }
 
+            //todo Implement Twilio for SMS verification: No leading “0”s, no international trunk code, just a “+” followed by the country code, followed by the rest of the number.
+
+            //string AccountSid = "AC45c8ffca432aa4de083ae282f69b90e6";
+            //string AuthToken = "8f66389155f70a75e6a07b547e3e1606";
+
+            //var twilio = new TwilioRestClient(AccountSid, AuthToken);
+            //var message = twilio.SendMessage("+12033499233", "+19542785589", "Code:" + r.ToString() , "");
+ 
             string token;
 
             using (WebClient client = new WebClient())
@@ -347,7 +362,7 @@ namespace Storytime.Controllers
                 string server = "http://" + ConfigurationManager.AppSettings["Server"] + "/Token";
                 token = client.UploadString(server, "POST", "grant_type=password&username=" + model.Email + "&password=" + model.Password);
             }
-
+            
             return Ok(token);
         }
 

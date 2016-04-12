@@ -18,7 +18,7 @@ namespace Storytime.Controllers
 
             System.Collections.Generic.List<Entities.Storytime> storytimelist = new List<Entities.Storytime>();
 
-            foreach (var c in db.Query<Entities.Storytime>("Select * from Storytime Where UserId = @0 UNION Select st.* from Storytime st inner join StorytimeGroup stg on st.StorytimeId = stg.StorytimeId Where stg.UserGroupId in (Select UserGroupId From UserGroup ug inner join UserGroupUser ugu on ug.UserGroupId = ugu.GroupId Where ugu.UserId = @0) UNION Select st.* from Storytime st inner join StorytimeUserList stul on st.StorytimeId = stul.StorytimeId Where stul.UserId = @0", Storytime.Providers.UserHelper.GetUserId(this.User.Identity.Name)))
+            foreach (var c in db.Query<Entities.Storytime>("Select * from Storytime Where UserId = @0 UNION Select st.* from Storytime st inner join StorytimeGroup stg on st.StorytimeId = stg.StorytimeId Where stg.UserGroupId in (Select ug.UserGroupId From UserGroup ug inner join UserGroupUser ugu on ug.UserGroupId = ugu.UserGroupId Where ugu.UserId = @0) UNION Select st.* from Storytime st inner join StorytimeUserList stul on st.StorytimeId = stul.StorytimeId Where stul.UserId = @0", Storytime.Providers.UserHelper.GetUserId(this.User.Identity.Name)))
             {
                 storytimelist.Add(c);
             }

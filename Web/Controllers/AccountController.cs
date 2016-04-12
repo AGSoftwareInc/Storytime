@@ -389,8 +389,10 @@ namespace Storytime.Controllers
                 string server = "http://" + ConfigurationManager.AppSettings["Server"] + "/Token";
                 token = client.UploadString(server, "POST", "grant_type=password&username=" + model.Email + "&password=" + model.Password);
             }
+
+            Newtonsoft.Json.Linq.JObject tokenjson = Newtonsoft.Json.Linq.JObject.Parse(token);
             
-            return Ok(token);
+            return Ok(tokenjson);
         }
 
         // POST api/Account/RegisterExternal

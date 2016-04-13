@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -19,7 +20,7 @@ namespace Storytime.Controllers
 
             foreach (Entities.StorytimePost c in db.Query<Entities.StorytimePost>("Select * From StorytimePost Where StorytimeId = @0", id))
             {
-                c.ImagePath = c.ImagePath.Replace("C:\\Storytime\\Web\\", "http://" + System.Configuration.ConfigurationManager.AppSettings["Server"] + @"\");
+                c.ImagePath = c.ImagePath.Replace(ConfigurationManager.AppSettings["UploadPath"], "http://" + System.Configuration.ConfigurationManager.AppSettings["Server"] + @"\");
                 c.ImagePath = c.ImagePath.Replace(@"\", @"/");
 
                 storytimepostlist.Add(c);

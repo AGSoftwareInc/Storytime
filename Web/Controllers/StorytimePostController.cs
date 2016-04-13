@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -54,7 +55,7 @@ namespace Storytime.Controllers
 
             if (a != null)
             {
-                a.ImagePath = a.ImagePath.Replace("C:\\Storytime\\Web\\", "http://" + System.Configuration.ConfigurationManager.AppSettings["Server"] + @"\");
+                a.ImagePath = a.ImagePath.Replace(ConfigurationManager.AppSettings["UploadPath"], "http://" + System.Configuration.ConfigurationManager.AppSettings["Server"] + @"\");
                 a.ImagePath = a.ImagePath.Replace(@"\", @"/");
 
                 return Ok(a);

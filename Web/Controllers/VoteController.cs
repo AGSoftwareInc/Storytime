@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -36,7 +37,7 @@ namespace Storytime.Controllers
 
             foreach(Entities.StorytimePost a in db.Query<Entities.StorytimePost>("Select stp1.* From StorytimePost stp1 Where stp1.StorytimeId = @0 And stp1.SeriesId = @1 And stp1.Votes = (Select MAX(stp2.Votes) From StorytimePost stp2 Where stp2.StorytimeId = stp1.StorytimeId)", new object [] {id,seriesid}))
             {
-                a.ImagePath = a.ImagePath.Replace("C:\\Storytime\\Web\\", "http://" + System.Configuration.ConfigurationManager.AppSettings["Server"] + @"\");
+                a.ImagePath = a.ImagePath.Replace(ConfigurationManager.AppSettings["UploadPath"], "http://" + System.Configuration.ConfigurationManager.AppSettings["Server"] + @"\");
                 a.ImagePath = a.ImagePath.Replace(@"\", @"/");
                 storytimepostlist.Add(a);
             }

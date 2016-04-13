@@ -29,7 +29,10 @@ namespace Storytime.Controllers
                     }
                 }
 
-                return Ok(newcontactlist);
+                if (newcontactlist.Count > 0)
+                    return Ok(newcontactlist);
+                else
+                    return NotFound();
             }
             else
             {

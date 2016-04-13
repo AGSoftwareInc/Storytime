@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -21,7 +20,8 @@ namespace Storytime.Controllers
 
             if (file != null)
             {
-                string pic = System.IO.Path.GetFileName(file.FileName);
+                string filename = Guid.NewGuid().ToString() + file.FileName;
+                string pic = System.IO.Path.GetFileName(filename);
                 string path = System.IO.Path.Combine(System.Web.HttpContext.Current.Server.MapPath("~/Content/Upload"), pic);
                 // file is uploaded
                 file.SaveAs(path);
@@ -30,7 +30,7 @@ namespace Storytime.Controllers
 
                 Entities.StorytimePost storytimepost = new Entities.StorytimePost();
                 storytimepost.DateCreated = System.DateTime.Now;
-                storytimepost.ImagePath = path;
+                storytimepost.ImagePath = filename;
                 storytimepost.PostText = HttpContext.Current.Request.Form["posttext"];
                 storytimepost.UserId = Storytime.Providers.UserHelper.GetUserId(HttpContext.Current.User.Identity.Name);
                 storytimepost.StorytimeId = int.Parse(HttpContext.Current.Request.Form["storytimeid"]);
@@ -55,7 +55,8 @@ namespace Storytime.Controllers
 
             if (a != null)
             {
-                a.ImagePath = a.ImagePath.Replace(ConfigurationManager.AppSettings["UploadPath"], "http://" + System.Configuration.ConfigurationManager.AppSettings["Server"] + @"\");
+                //a.ImagePath = a.ImagePath.Replace(ConfigurationManager.AppSettings["UploadPath"], "http://" + System.Configuration.ConfigurationManager.AppSettings["Server"] + @"\");
+                a.ImagePath = Providers.ImageHelper.GetImagePath(a.ImagePath);
                 a.ImagePath = a.ImagePath.Replace(@"\", @"/");
 
                 return Ok(a);

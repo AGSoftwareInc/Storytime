@@ -11,5 +11,6 @@ namespace Entities
         public int StorytimeGroupId { get; set; }
         public int StorytimeId { get; set; }
         public int UserGroupId { get; set; }
+        public bool UsersNotified { get; set; }
     }
 }

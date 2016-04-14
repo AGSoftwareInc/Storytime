@@ -52,6 +52,7 @@
       <DependentUpon>Database.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PetaPoco.cs" />
+    <Compile Include="Notification.cs" />
     <Compile Include="StorytimeSeries.cs" />
     <Compile Include="Storytime.cs" />
     <Compile Include="StorytimeGroup.cs" />
@@ -76,6 +77,12 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Database.cs</LastGenOutput>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MoonApns\MoonAPNS.csproj">
+      <Project>{a91e03ef-6532-4896-89c4-9fcec1d8d4db}</Project>
+      <Name>MoonAPNS</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

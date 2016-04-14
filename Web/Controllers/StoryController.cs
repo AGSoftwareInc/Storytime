@@ -35,7 +35,8 @@ namespace Storytime.Controllers
             {
                 StorytimeGroup storytimegroup = new StorytimeGroup();
                 storytimegroup.StorytimeId = storytime.StorytimeId;
-                storytimegroup.StorytimeGroupId = storytime.StorytimeGroupId;
+                storytimegroup.UserGroupId = storytime.UserGroupId;
+                storytimegroup.UsersNotified = false;
                 db.Insert(storytimegroup);
 
                 return Ok(storytime.StorytimeId);
@@ -48,6 +49,7 @@ namespace Storytime.Controllers
                 {
                     storytimeuserlist.StorytimeId = storytime.StorytimeId;
                     storytimeuserlist.UserId = user.Id;
+                    storytimeuserlist.UserNotified = false;
                     db.Insert(storytimeuserlist);
                 }
 

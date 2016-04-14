@@ -74,9 +74,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MoonApns\MoonAPNS.csproj">
-      <Project>{a91e03ef-6532-4896-89c4-9fcec1d8d4db}</Project>
-      <Name>MoonAPNS</Name>
+    <ProjectReference Include="..\Entities\Entities.csproj">
+      <Project>{84cf1b8a-c119-44b7-9d61-407f2285da1b}</Project>
+      <Name>Entities</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

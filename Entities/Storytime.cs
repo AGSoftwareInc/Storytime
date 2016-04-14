@@ -31,7 +31,7 @@ namespace Entities
         public List<StorytimePost> StorytimePosts { get; set; }
 
         [PetaPoco.Ignore]
-        public int StorytimeGroupId { get; set; }
+        public int UserGroupId { get; set; }
 
         [PetaPoco.Ignore]
         public StorytimeType StorytimeType 

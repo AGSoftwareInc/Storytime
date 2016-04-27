@@ -52,6 +52,7 @@ namespace Storytime.Controllers
                 return RedirectToAction("ResetPasswordConfirmation", "ResetPassword");
             }
             //var decode = HttpUtility.UrlDecode(model.Code);
+
             var result = await UserManager.ResetPasswordAsync(user.Id, model.Code, model.Password);
             if (result.Succeeded)
             {

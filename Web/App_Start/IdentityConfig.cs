@@ -14,6 +14,7 @@ namespace Storytime
 
     public class ApplicationUserManager : UserManager<ApplicationUser>
     {
+        public bool IsResettingPassword { get; set; }
         public ApplicationUserManager(IUserStore<ApplicationUser> store)
             : base(store)
         {
@@ -21,9 +22,9 @@ namespace Storytime
 
         public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context)
         {
-            var manager = new ApplicationUserManager(new UserStore<ApplicationUser>(context.Get<ApplicationDbContext>()));
+         var manager = new ApplicationUserManager(new UserStore<ApplicationUser>(context.Get<ApplicationDbContext>()));
             // Configure validation logic for usernames
-            manager.UserValidator = new CustomUserValidator<ApplicationUser>(manager)
+            manager.UserValidator = new UserValidator<ApplicationUser>(manager)
             {
                 AllowOnlyAlphanumericUserNames = false,
                  RequireUniqueEmail = true
@@ -49,47 +50,6 @@ namespace Storytime
             return manager;
         }
     }
-
-    public class CustomUserValidator<TUser> : UserValidator<TUser, string > where TUser : ApplicationUser
-    {
-        public CustomUserValidator(UserManager<TUser, string> manager) : base(manager)
-        {
-
-        }
-        public override async Task<IdentityResult> ValidateAsync(TUser applicationuser)
-        {
-            IdentityResult result = await base.ValidateAsync(applicationuser);
-
-            if (result.Succeeded)
-            {
-                var errors = new System.Collections.Generic.List<string>();
-
-                await ValidatePhoneNumber(applicationuser, errors);
-
-                if (errors.Count > 0)
-                    return IdentityResult.Failed(errors.ToArray());
-                else
-                    return result;
-            }
-            else
-            {
-                return result;
-            }
-        }
-
-            private async Task ValidatePhoneNumber(TUser applicationuser, System.Collections.Generic.List<string> errors)
-            {
-                var db = new PetaPoco.Database("AGSoftware");
-
-                var iscontact = db.SingleOrDefault<Entities.AspNetUsers>("Select * From ASPNetUsers Where PhoneNumber = @0", applicationuser.PhoneNumber);
-
-                if (iscontact != null)
-                {
-                    errors.Add("Phone number " + applicationuser.PhoneNumber + " is already taken.");
-                }
-            }
-            
-        }
 
     public class EmailService : IIdentityMessageService
     {

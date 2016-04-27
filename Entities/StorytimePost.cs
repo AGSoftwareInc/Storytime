@@ -15,6 +15,8 @@ namespace Entities
         public string PostText { get; set; }
         public string ImagePath { get; set; }
         public int Votes { get; set; }
+        [PetaPoco.Ignore]
+        public bool Voted { get; set; }
         public DateTime DateCreated { get; set; }
     }
 }

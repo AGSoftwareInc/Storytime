@@ -366,6 +366,16 @@ namespace Storytime.Controllers
 
             user.SMSCode = r.ToString();
 
+            // todo figure out how to incorporate this into the built in identity model
+            var db = new PetaPoco.Database("AGSoftware");
+            var iscontact = db.SingleOrDefault<Entities.AspNetUsers>("Select * From ASPNetUsers Where PhoneNumber = @0", model.PhoneNumber);
+
+            if (iscontact != null)
+            {
+                ModelState.AddModelError("", "Phone number " + model.PhoneNumber + " is already taken.");
+                return BadRequest(ModelState);
+            }
+
             IdentityResult result = await UserManager.CreateAsync(user, model.Password);
 
             if (!result.Succeeded)

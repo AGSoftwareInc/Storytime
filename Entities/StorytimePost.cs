@@ -17,6 +17,10 @@ namespace Entities
         public int Votes { get; set; }
         [PetaPoco.Ignore]
         public bool Voted { get; set; }
+        [PetaPoco.Ignore]
+        public string PhoneNumber { get; set; }
+        [PetaPoco.Ignore]
+        public bool UserPostedImage { get; set; }
         public DateTime DateCreated { get; set; }
     }
 }

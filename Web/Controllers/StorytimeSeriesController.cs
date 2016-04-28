@@ -31,17 +31,24 @@ namespace Storytime.Controllers
             var db2 = new PetaPoco.Database("AGSoftware");
             System.Collections.Generic.List<Entities.StorytimePost> storytimepostlist = new List<Entities.StorytimePost>();
 
+            string UserId = "";
+
             foreach (Entities.StorytimePost c in db.Query<Entities.StorytimePost>("Select * From StorytimePost Where SeriesId = @0", id))
             {
                 c.ImagePath = Providers.ImageHelper.GetImagePath(c.ImagePath);
                 c.ImagePath = c.ImagePath.Replace(@"\", @"/");
-
-                var voted  = db2.SingleOrDefault<Entities.Vote>("Select * From Vote Where StorytimePostId = @0 And UserId = @1", new object []{c.StorytimePostId, Providers.UserHelper.GetUserId(this.User.Identity.Name)});
+                UserId = Providers.UserHelper.GetUserId(this.User.Identity.Name);
+                var voted  = db2.SingleOrDefault<Entities.Vote>("Select * From Vote Where StorytimePostId = @0 And UserId = @1", new object []{c.StorytimePostId, UserId});
 
                 if (voted != null)
                     c.Voted = true;
                 else
                     c.Voted = false;
+
+                if (c.UserId == UserId)
+                    c.UserPostedImage = true;
+
+                c.PhoneNumber = Providers.UserHelper.GetPhoneNumber(this.User.Identity.Name);
 
                 storytimepostlist.Add(c);
             }

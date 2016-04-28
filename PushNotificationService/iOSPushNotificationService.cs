@@ -8,12 +8,15 @@ using System.Diagnostics;
 using System.Linq;
 using System.ServiceProcess;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace PushNotificationService
 {
     public partial class iOSPushNotificationService : ServiceBase
     {
+        private Thread thread;
+
         public iOSPushNotificationService()
         {
             InitializeComponent();
@@ -21,8 +24,21 @@ namespace PushNotificationService
 
         protected override void OnStart(string[] args)
         {
-            Notification notification = new Notification(ConfigurationManager.AppSettings["CertPath"], ConfigurationManager.AppSettings["CertPassword"]);
-            notification.Notify();
+            thread = new Thread(WorkerThreadFunc);
+            thread.Name = "My Worker Thread";
+            thread.IsBackground = true;
+            thread.Start();
+        }
+
+        private void WorkerThreadFunc()
+        {
+            while (1 == 1)
+            {
+                Notification notification = new Notification(ConfigurationManager.AppSettings["CertPath"], ConfigurationManager.AppSettings["CertPassword"]);
+                notification.Notify();
+
+                Thread.Sleep(30000);
+            }
         }
 
         protected override void OnStop()

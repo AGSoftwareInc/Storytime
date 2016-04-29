@@ -34,10 +34,16 @@ namespace PushNotificationService
         {
             while (1 == 1)
             {
+                try
+                { 
                 Notification notification = new Notification(ConfigurationManager.AppSettings["CertPath"], ConfigurationManager.AppSettings["CertPassword"]);
                 notification.Notify();
-
+                    }
+                catch (System.Exception ex)
+                { }
+                finally { 
                 Thread.Sleep(30000);
+                }
             }
         }
 

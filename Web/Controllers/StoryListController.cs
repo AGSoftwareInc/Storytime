@@ -12,19 +12,21 @@ namespace Storytime.Controllers
     public class StoryListController : ApiController
     {
         [HttpGet]
-        public IHttpActionResult Get(string id)
+        public IHttpActionResult Get(string page, string count)
         {
             var db = new PetaPoco.Database("AGSoftware");
+            string userid = Storytime.Providers.UserHelper.GetUserId(this.User.Identity.Name);
+            
+            //var b = db.Page<Entities.Storytime>(int.Parse(page), int.Parse(count), "Select * from Storytime Where UserId = @0 UNION Select st.* from Storytime st inner join StorytimeGroup stg on st.StorytimeId = stg.StorytimeId Where stg.UserGroupId in (Select ug.UserGroupId From UserGroup ug inner join UserGroupUser ugu on ug.UserGroupId = ugu.UserGroupId Where ugu.UserId = @0) UNION Select st.* from Storytime st inner join StorytimeUserList stul on st.StorytimeId = stul.StorytimeId Where stul.UserId = @0", new object[] { userid });
 
-            System.Collections.Generic.List<Entities.Storytime> storytimelist = new List<Entities.Storytime>();
+            int offset = (int.Parse(page) - 1) * int.Parse(count);
 
-            foreach (var c in db.Query<Entities.Storytime>("Select * from Storytime Where UserId = @0 UNION Select st.* from Storytime st inner join StorytimeGroup stg on st.StorytimeId = stg.StorytimeId Where stg.UserGroupId in (Select ug.UserGroupId From UserGroup ug inner join UserGroupUser ugu on ug.UserGroupId = ugu.UserGroupId Where ugu.UserId = @0) UNION Select st.* from Storytime st inner join StorytimeUserList stul on st.StorytimeId = stul.StorytimeId Where stul.UserId = @0", Storytime.Providers.UserHelper.GetUserId(this.User.Identity.Name)))
-            {
-                storytimelist.Add(c);
-            }
+            var b = db.Page<Entities.Storytime>(int.Parse(page), int.Parse(count), "with c as (Select st.* from Storytime st Where UserId = @0 UNION Select st.* from Storytime st inner join StorytimeGroup stg on st.StorytimeId = stg.StorytimeId Where stg.UserGroupId in (Select ug.UserGroupId From UserGroup ug inner join UserGroupUser ugu on ug.UserGroupId = ugu.UserGroupId Where ugu.UserId = @0) UNION Select st.* from Storytime st inner join StorytimeUserList stul on st.StorytimeId = stul.StorytimeId Where stul.UserId = @0) select count(*) from c", new object[] { userid }, "Select * From (Select st.* from Storytime st Where UserId = @0 UNION Select st.* from Storytime st inner join StorytimeGroup stg on st.StorytimeId = stg.StorytimeId Where stg.UserGroupId in (Select ug.UserGroupId From UserGroup ug inner join UserGroupUser ugu on ug.UserGroupId = ugu.UserGroupId Where ugu.UserId = @0) UNION Select st.* from Storytime st inner join StorytimeUserList stul on st.StorytimeId = stul.StorytimeId Where stul.UserId = @0) as result order by DateCreated Desc Offset " + offset + " Rows Fetch Next " + count + " Rows Only", new object[] { userid });
+            //var b = db.Page<Entities.Storytime>(int.Parse(page), int.Parse(count), "Select st.* from Storytime st Where UserId = @0 UNION Select st.* from Storytime st inner join StorytimeGroup stg on st.StorytimeId = stg.StorytimeId Where stg.UserGroupId in (Select ug.UserGroupId From UserGroup ug inner join UserGroupUser ugu on ug.UserGroupId = ugu.UserGroupId Where ugu.UserId = @0) UNION Select st.* from Storytime st inner join StorytimeUserList stul on st.StorytimeId = stul.StorytimeId Where stul.UserId = @0 group by st.datecreated, st.storytimeid, st.storytimetitle, st.storytimetypeid, st.userid order by st.datecreated desc, st.storytimeid, st.storytimetitle, st.storytimetypeid, st.userid", new object[] { userid });
 
-            if (storytimelist.Count > 0)
-                return Ok(storytimelist);
+
+            if (b.Items.Count > 0)
+                return Ok(b);
             else
                 return NotFound();
         }

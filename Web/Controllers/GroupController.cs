@@ -39,7 +39,7 @@ namespace Storytime.Controllers
             var db = new PetaPoco.Database("AGSoftware");
             string userid = Storytime.Providers.UserHelper.GetUserId(this.User.Identity.Name);
 
-            var b = db.Page<Entities.UserGroup>(int.Parse(page), int.Parse(count), "Select * from UserGroup Where UserId = @0", new object[] { userid });
+            var b = db.Page<Entities.UserGroup>(int.Parse(page), int.Parse(count), "Select * from UserGroup Where UserId = @0 order by DateCreated Desc", new object[] { userid });
 
             if (b.Items.Count > 0)
             {

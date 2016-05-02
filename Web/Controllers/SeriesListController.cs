@@ -17,7 +17,7 @@ namespace Storytime.Controllers
 
             System.Collections.Generic.List<Entities.StorytimeSeries> storytimeserieslist = new List<Entities.StorytimeSeries>();
 
-            foreach (Entities.StorytimeSeries c in db.Query<Entities.StorytimeSeries>("Select * From StorytimeSeries Where StorytimeId = @0", id))
+            foreach (Entities.StorytimeSeries c in db.Query<Entities.StorytimeSeries>("Select * From StorytimeSeries Where StorytimeId = @0 Order By DateCreated Desc", id))
             {
                 storytimeserieslist.Add(c);
             }

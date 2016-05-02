@@ -51,11 +51,10 @@ namespace Storytime.Controllers
         {
             var db = new PetaPoco.Database("AGSoftware");
 
-            var a = db.SingleOrDefault<Entities.StorytimePost>("Select * from StorytimePost Where StorytimePostId = @0", id);
+            var a = db.SingleOrDefault<Entities.StorytimePost>("Select * from StorytimePost Where StorytimePostId = @0  Order By DateCreated Desc", id);
 
             if (a != null)
             {
-                //a.ImagePath = a.ImagePath.Replace(ConfigurationManager.AppSettings["UploadPath"], "http://" + System.Configuration.ConfigurationManager.AppSettings["Server"] + @"\");
                 a.ImagePath = Providers.ImageHelper.GetImagePath(a.ImagePath);
                 a.ImagePath = a.ImagePath.Replace(@"\", @"/");
 

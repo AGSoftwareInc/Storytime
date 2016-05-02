@@ -17,7 +17,7 @@ namespace Storytime.Controllers
 
             System.Collections.Generic.List<Entities.StorytimePost> storytimepostlist = new List<Entities.StorytimePost>();
 
-            foreach (Entities.StorytimePost c in db.Query<Entities.StorytimePost>("Select * From StorytimePost Where StorytimeId = @0", id))
+            foreach (Entities.StorytimePost c in db.Query<Entities.StorytimePost>("Select * From StorytimePost Where StorytimeId = @0 Order By DateCreated Desc", id))
             {
                 c.ImagePath = Providers.ImageHelper.GetImagePath(c.ImagePath);
                 c.ImagePath = c.ImagePath.Replace(@"\", @"/");

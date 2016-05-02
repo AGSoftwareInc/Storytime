@@ -33,7 +33,7 @@ namespace Storytime.Controllers
 
             string UserId = "";
 
-            foreach (Entities.StorytimePost c in db.Query<Entities.StorytimePost>("Select * From StorytimePost Where SeriesId = @0", id))
+            foreach (Entities.StorytimePost c in db.Query<Entities.StorytimePost>("Select * From StorytimePost Where SeriesId = @0 Order By DateCreated Desc", id))
             {
                 c.ImagePath = Providers.ImageHelper.GetImagePath(c.ImagePath);
                 c.ImagePath = c.ImagePath.Replace(@"\", @"/");

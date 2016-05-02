@@ -12,5 +12,6 @@ namespace Entities
         public string UserId { get; set; }
         public int StorytimePostId { get; set; }
         public DateTime DateCreated { get; set; }
+        public bool UserNotified { get; set; }
     }
 }

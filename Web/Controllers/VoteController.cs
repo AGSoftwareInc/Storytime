@@ -18,6 +18,7 @@ namespace Storytime.Controllers
             vote.StorytimePostId = int.Parse(id);
             vote.DateCreated = System.DateTime.Now;
             vote.UserId = Storytime.Providers.UserHelper.GetUserId(this.User.Identity.Name);
+            vote.UserNotified = false;
             db.Insert(vote);
 
             var storytimepost = db.SingleOrDefault<Entities.StorytimePost>("Select * from StorytimePost Where StorytimePostId = @0", id);

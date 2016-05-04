@@ -13,5 +13,26 @@ namespace Entities
         public string UserId { get; set; }
         public string SeriesText { get; set; }
         public DateTime DateCreated { get; set; }
+        [PetaPoco.Ignore]
+        public bool ImagePostingExpired
+        {
+            get
+            {
+                if (this.DateCreated.AddHours(12) > System.DateTime.Now)
+                    return false;
+                else
+                    return true;
+            }
+        }
+        [PetaPoco.Ignore]
+        public bool VotingExpired { 
+            get
+            {
+                if (this.DateCreated.AddHours(24) > System.DateTime.Now)
+                    return false;
+                else
+                    return true;
+            }
+        }
     }
 }

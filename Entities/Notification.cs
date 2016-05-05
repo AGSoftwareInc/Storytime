@@ -13,6 +13,7 @@ namespace PushNotificationService
         private const string newvote = "A new vote has been cast!";
         private const string serieswinner = "Series winner:";
         private const string nowinner = "There were no winners for series ";
+        private const string storywinner = "Story winner: ";
         private string CertPath = "";
         private string CertPassword = "";
 
@@ -179,7 +180,51 @@ namespace PushNotificationService
         }
 
         private void NotifyStoryWinner()
-        {}
+        {
+            var db = new PetaPoco.Database("AGSoftware");
+            var db2 = new PetaPoco.Database("AGSoftware");
+            var db3 = new PetaPoco.Database("AGSoftware");
+            var db4 = new PetaPoco.Database("AGSoftware");
+
+            foreach (var a in db.Query<Entities.Storytime>("select * from storytime s where (select count(*) from storytimeseries ss where ss.storytimeid = s.storytimeid) = 10 and s.UsersNotified = 0"))
+            {
+                var b = db2.SingleOrDefault<Entities.StoryWinner>("Select top 1 sum(sp.votes) as votes, u.username, s.storytimetitle from storytimeseries ss inner join storytimepost sp on ss.StorytimeSeriesId = sp.SeriesId inner join AspNetUsers u on u.id = sp.UserId inner join storytime s on s.storytimeid = ss.storytimeid where ss.storytimeid = @0 group by u.username, s.storytimetitle order by votes desc", a.StorytimeId);
+
+                if (a.StorytimeTypeId == 1)
+                {
+                    var c = db2.SingleOrDefault<Entities.StorytimeGroup>("Select * from StorytimeGroup Where StorytimeId = @0", a.StorytimeId);
+                    var d = db2.SingleOrDefault<Entities.UserGroup>("Select * from UserGroup Where UserGroupId = @0", c.UserGroupId);
+
+                    foreach (var e in db3.Query<Entities.UserGroupUser>("Select * From UserGroupUser Where UserGroupId = @0", d.UserGroupId))
+                    {
+                        if (e != null)
+                        {
+                            var f = db4.SingleOrDefault<Entities.AspNetUsers>("Select * from AspNetUsers Where Id = @0", e.UserId);
+
+                            if (f != null && f.DeviceToken != null)
+                            {
+                                CreatePushNotification(storywinner + f.UserName + " has won the story " + a.StorytimeTitle + " with " + b.Votes + " !", f.DeviceToken);
+                            }
+                        }
+                    }
+                }
+                else if (a.StorytimeTypeId == 2)
+                {
+                    foreach (var g in db3.Query<Entities.StorytimeUserList>("Select * from StorytimeUserList Where StorytimeId = @0", a.StorytimeId))
+                    {
+                        var h = db4.SingleOrDefault<Entities.AspNetUsers>("Select * from AspNetUsers Where Id = @0", g.UserId);
+
+                        if (h != null && h.DeviceToken != null)
+                        {
+                            CreatePushNotification(storywinner + h.UserName + " has won the story " + a.StorytimeTitle + " with " + b.Votes + " !", h.DeviceToken);
+                        }
+                    }
+                }
+
+                a.UsersNotified = true;
+                db4.Update(a);
+            }
+        }
 
         private void CreatePushNotification(string notificationtext, string devicetoken)
         {

@@ -23,7 +23,7 @@ namespace Entities
             }
         }
         public string UserId { get; set; }
-
+        public bool UsersNotified { get; set; }
         [PetaPoco.Ignore]
         public List<AspNetUsers> Users { get; set; }
 

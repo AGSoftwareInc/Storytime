@@ -29,6 +29,7 @@ namespace Storytime.Controllers
             var db = new PetaPoco.Database("AGSoftware");
             storytime.DateCreated = System.DateTime.Now;
             storytime.UserId = Storytime.Providers.UserHelper.GetUserId(this.User.Identity.Name);
+            storytime.UsersNotified = false;
             db.Insert(storytime);
 
             if (storytime.StorytimeType == StorytimeType.Group)

@@ -127,7 +127,7 @@ namespace PushNotificationService
             var db3 = new PetaPoco.Database("AGSoftware");
             var db4 = new PetaPoco.Database("AGSoftware");
 
-            foreach (var a in db.Query<Entities.SeriesWinner>("Select ss.StorytimeSeriesId, s.StorytimeTypeId, s.StorytimeId, ss.SeriesText, u.Username, sp1.Votes From StorytimeSeries ss inner join Storytime s on s.StorytimeId = ss.StorytimeId inner join AspNetUsers u on ss.UserId = u.Id inner join StorytimePost sp1 on sp1.SeriesId = ss.StorytimeSeriesId And sp1.Votes = (Select MAX(sp2.Votes) From StorytimePost sp2 Where sp2.StorytimeId = sp1.StorytimeId) Where ss.UsersNotified = 0 And ss.DateCreated < DateAdd(hh, -24, GetDate())"))
+            foreach (var a in db.Query<Entities.SeriesWinner>("Select ss.StorytimeSeriesId, s.StorytimeTypeId, s.StorytimeId, s.StorytimeTitle, ss.SeriesText, u.Username, sp1.Votes From StorytimeSeries ss inner join Storytime s on s.StorytimeId = ss.StorytimeId inner join AspNetUsers u on ss.UserId = u.Id inner join StorytimePost sp1 on sp1.SeriesId = ss.StorytimeSeriesId And sp1.Votes = (Select MAX(sp2.Votes) From StorytimePost sp2 Where sp2.StorytimeId = sp1.StorytimeId) Where ss.UsersNotified = 0 And ss.DateCreated < DateAdd(hh, -24, GetDate())"))
             {
                 if (a.StorytimeTypeId == 1)
                 {
@@ -144,9 +144,9 @@ namespace PushNotificationService
                             {
                                 string notificationtext = string.Empty;
                                 if (a.Votes > 0)
-                                    notificationtext = serieswinner + " " + a.Username + " has won the series " + a.SeriesText + " with " + a.Votes + " votes!";
+                                    notificationtext = serieswinner + " " + a.Username + " has won the series " + a.SeriesText + " for Story " + a.StorytimeTitle + " with " + a.Votes + " votes!";
                                 else
-                                    notificationtext = nowinner + a.SeriesText;
+                                    notificationtext = nowinner + a.SeriesText + " for Story " + a.StorytimeTitle;
                                 CreatePushNotification(notificationtext, e.DeviceToken);
                             }
                         }
@@ -162,9 +162,9 @@ namespace PushNotificationService
                         {
                             string notificationtext = string.Empty;
                             if (a.Votes > 0)
-                                notificationtext = serieswinner + " " + a.Username + " has won the series " + a.SeriesText + " with " + a.Votes + " votes!";
+                                notificationtext = serieswinner + " " + a.Username + " has won the series " + a.SeriesText + " for Story " + a.StorytimeTitle + " with " + a.Votes + " votes!";
                             else
-                                notificationtext = nowinner + a.SeriesText;
+                                notificationtext = nowinner + a.SeriesText + " for Story " + a.StorytimeTitle;
                             CreatePushNotification(notificationtext, g.DeviceToken);
                         }
                     }

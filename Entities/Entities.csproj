@@ -53,6 +53,7 @@
     </Compile>
     <Compile Include="Models\PetaPoco.cs" />
     <Compile Include="Notification.cs" />
+    <Compile Include="SeriesWinner.cs" />
     <Compile Include="StorytimeSeries.cs" />
     <Compile Include="Storytime.cs" />
     <Compile Include="StorytimeGroup.cs" />

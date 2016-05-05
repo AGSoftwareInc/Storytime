@@ -19,6 +19,7 @@ namespace Storytime.Controllers
             storytimeseries.StorytimeId = int.Parse(id);
             storytimeseries.DateCreated = System.DateTime.Now;
             storytimeseries.UserId = Storytime.Providers.UserHelper.GetUserId(this.User.Identity.Name);
+            storytimeseries.UsersNotified = false;
             db.Insert(storytimeseries);
 
             return Ok(storytimeseries);

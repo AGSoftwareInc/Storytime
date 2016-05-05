@@ -13,6 +13,7 @@ namespace Entities
         public string UserId { get; set; }
         public string SeriesText { get; set; }
         public DateTime DateCreated { get; set; }
+        public bool UsersNotified { get; set; }
         [PetaPoco.Ignore]
         public bool ImagePostingExpired
         {

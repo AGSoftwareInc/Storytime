@@ -229,6 +229,7 @@ namespace PushNotificationService
         private void CreatePushNotification(string notificationtext, string devicetoken)
         {
             var payload1 = new NotificationPayload(devicetoken, notificationtext, 1, "default");
+            payload1.AddCustom("content-available", "1");
             var notificationList = new List<NotificationPayload> { payload1 };
             var push = new PushNotification(true, CertPath, CertPassword);
             var rejected = push.SendToApple(notificationList);

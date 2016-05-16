@@ -16,11 +16,13 @@ namespace PushNotificationService
         private const string storywinner = "Story winner: ";
         private string CertPath = "";
         private string CertPassword = "";
+        private bool UseAppleSandbox;
 
-        public Notification (string certpath, string certpassword)
+        public Notification (string certpath, string certpassword, bool useapplesandbox)
         {
             this.CertPath = certpath;
             this.CertPassword = certpassword;
+            this.UseAppleSandbox = useapplesandbox;
         }
 
         public void Notify()
@@ -228,10 +230,9 @@ namespace PushNotificationService
 
         private void CreatePushNotification(string notificationtext, string devicetoken)
         {
-            var payload1 = new NotificationPayload(devicetoken, notificationtext, 1, "default");
-            payload1.AddCustom("content-available", "1");
+            var payload1 = new NotificationPayload(devicetoken, notificationtext,  1, "default", 1);
             var notificationList = new List<NotificationPayload> { payload1 };
-            var push = new PushNotification(true, CertPath, CertPassword);
+            var push = new PushNotification(UseAppleSandbox, CertPath, CertPassword);
             var rejected = push.SendToApple(notificationList);
         }
     }

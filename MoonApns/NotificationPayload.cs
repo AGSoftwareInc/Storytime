@@ -31,7 +31,7 @@ namespace MoonAPNS
 		public string Sound { get; set; }
 
         internal int PayloadId { get; set; }
-
+        public int Content_available { get; set; }
 		public Dictionary<string, object[]> CustomItems
 		{
 			get;
@@ -68,6 +68,17 @@ namespace MoonAPNS
 			Sound = sound;
 			CustomItems = new Dictionary<string, object[]>();
 		}
+
+        public NotificationPayload(string deviceToken, string alert, int badge, string sound, int content_available)
+        {
+            DeviceToken = deviceToken;
+            Alert = new NotificationAlert() { Body = alert };
+            Badge = badge;
+            Sound = sound;
+            Content_available = content_available;
+            CustomItems = new Dictionary<string, object[]>();
+
+        }
 
 		public void AddCustom(string key, params object[] values)
 		{
@@ -115,7 +126,9 @@ namespace MoonAPNS
 
 			if (!string.IsNullOrEmpty(this.Sound))
 				aps["sound"] = new JValue(this.Sound);
-					
+
+            if (this.Content_available == 1)
+                aps["content-available"] = new JValue(this.Content_available);
 
 			json["aps"] = aps;
 

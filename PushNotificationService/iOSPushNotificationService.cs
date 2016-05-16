@@ -35,8 +35,15 @@ namespace PushNotificationService
             while (1 == 1)
             {
                 try
-                { 
-                Notification notification = new Notification(ConfigurationManager.AppSettings["CertPath"], ConfigurationManager.AppSettings["CertPassword"]);
+                {
+                    bool useapplesandbox;
+
+                    if (ConfigurationManager.AppSettings["UseAppleSandbox"] == "true")
+                        useapplesandbox = true;
+                    else
+                        useapplesandbox = false;
+
+                    Notification notification = new Notification(ConfigurationManager.AppSettings["CertPath"], ConfigurationManager.AppSettings["CertPassword"], useapplesandbox);
                 notification.Notify();
                     }
                 catch (System.Exception ex)

@@ -50,5 +50,27 @@ namespace Storytime.Controllers
                 return NotFound();
             }
         }
+
+        [HttpPost]
+        public IHttpActionResult AddNewGroupUsers([FromBody]Entities.UserGroup usergroup)
+        {
+            var db = new PetaPoco.Database("AGSoftware");
+
+            var b = db.SingleOrDefault<Entities.UserGroup>("Select * from UserGroup Where UserGroupId = @0", usergroup.UserGroupId);
+
+            Entities.UserGroupUser usergroupuser = null;
+
+            foreach (Entities.AspNetUsers user in usergroup.Users)
+            {
+                //todo see if there is a better way to do this with normalization and/or one connection.
+                var db2 = new PetaPoco.Database("AGSoftware");
+                usergroupuser = new Entities.UserGroupUser();
+                usergroupuser.UserGroupId = usergroup.UserGroupId;
+                usergroupuser.UserId = db2.SingleOrDefault<Entities.AspNetUsers>("Select Id from AspNetUsers where Id = @0", user.Id).Id; ;
+                db2.Insert(usergroupuser);
+            }
+
+            return Ok();
+        }
     }
 }

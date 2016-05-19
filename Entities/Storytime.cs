@@ -11,8 +11,10 @@ namespace Entities
         public int StorytimeId { get; set; }
         public string StorytimeTitle { get; set; }
         public DateTime DateCreated { get; set; }
+        public string PhoneNumber { get; set; }
         private int storytimetypeid;
         private StorytimeType storytimetype;
+
         public int StorytimeTypeId
         {
             get { return (int)this.StorytimeType; }

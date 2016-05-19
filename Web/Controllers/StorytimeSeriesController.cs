@@ -49,7 +49,7 @@ namespace Storytime.Controllers
                 if (c.UserId == UserId)
                     c.UserPostedImage = true;
 
-                c.PhoneNumber = Providers.UserHelper.GetPhoneNumber(this.User.Identity.Name);
+                c.PhoneNumber = Providers.UserHelper.GetPhoneNumberById(c.UserId);
 
                 storytimepostlist.Add(c);
             }

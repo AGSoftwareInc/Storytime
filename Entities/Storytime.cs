@@ -11,6 +11,7 @@ namespace Entities
         public int StorytimeId { get; set; }
         public string StorytimeTitle { get; set; }
         public DateTime DateCreated { get; set; }
+        [PetaPoco.ResultColumn]
         public string PhoneNumber { get; set; }
         private int storytimetypeid;
         private StorytimeType storytimetype;

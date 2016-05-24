@@ -44,7 +44,7 @@ namespace PushNotificationService
                 var b = db2.SingleOrDefault<Entities.AspNetUsers>("Select * from AspNetUsers Where Id = @0", a.UserId);
                 var storytime = db2.SingleOrDefault<Entities.Storytime>("Select * from Storytime Where StorytimeId = @0", a.StorytimeId);
 
-                if (b.DeviceToken != null)
+                if (storytime.UserId != b.Id && b.DeviceToken != null)
                 {
                     CreatePushNotification(newstory + storytime.StorytimeTitle, b.DeviceToken);
                 }
@@ -62,7 +62,7 @@ namespace PushNotificationService
                 {
                     var f = db2.SingleOrDefault<Entities.AspNetUsers>("Select * from AspNetUsers Where Id = @0", e.UserId);
 
-                    if (f != null && f.DeviceToken != null)
+                    if (f != null && f.Id != storytime.UserId && f.DeviceToken != null)
                     {
                         CreatePushNotification(newstory + storytime.StorytimeTitle, f.DeviceToken);
                     }

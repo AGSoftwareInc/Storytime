@@ -54,6 +54,11 @@ namespace Storytime.Controllers
                     db.Insert(storytimeuserlist);
                 }
 
+                storytimeuserlist.StorytimeId = storytime.StorytimeId;
+                storytimeuserlist.UserId = storytime.UserId;
+                storytimeuserlist.UserNotified = false;
+                db.Insert(storytimeuserlist);
+
                 return Ok(storytime.StorytimeId);
             }
             else
